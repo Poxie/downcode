@@ -1,6 +1,7 @@
 import { Courses } from "./Courses";
 import { Header } from "./Header";
 import { Layouts } from "./Layouts";
+import { Questions } from "./Questions";
 
 export default function Home() {
     return(
@@ -8,6 +9,7 @@ export default function Home() {
             <Header />
             <Courses />
             <Layouts />
+            <Questions />
         </main>
     )
 }
