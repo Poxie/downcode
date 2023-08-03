@@ -62,7 +62,7 @@ export const Layouts = () => {
                 })}
             </ul>
 
-            <div className="pt-8">
+            <div className="pt-8 pb-9">
                 <div className="flex gap-[7px] border-[1px] bg-secondary border-tertiary p-4 rounded-t-xl">
                     <div className="w-3 h-3 bg-[#C15344] rounded-full" />
                     <div className="w-3 h-3 bg-[#BFC144] rounded-full" />
