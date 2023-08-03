@@ -2,7 +2,7 @@ import { Button } from "../button"
 
 export const Header = () => {
     return(
-        <div className="bg-gradient-to-b from-[#1E293B] to-[#0F172A]">
+        <section className="bg-gradient-to-b from-[#1E293B] to-[#0F172A]">
             <div className="w-[820px] max-w-main m-auto grid place-items-center gap-6 pt-36 pb-[220px] sm:py-[260px]">
                 <h1 className="text-center text-3xl sm:text-4xl md:text-5xl font-extrabold w-full md:w-[90%] max-w-full">
                     The fastest way to learn to code. For <span className="text-c-primary">pros</span> and <span className="text-c-primary">newbies</span>.
@@ -22,6 +22,6 @@ export const Header = () => {
                     </Button>
                 </div>
             </div>
-        </div>
+        </section>
     )
 }
