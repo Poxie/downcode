@@ -31,6 +31,7 @@ export const Courses = () => {
                                     <button 
                                         className={`${!active ? 'text-secondary' : 'text-c-primary border-b-[1px] border-b-c-primary'} hover:text-c-primary text-sm font-semibold`}
                                         onClick={() => {
+                                            if(courseType === activeType) return;
                                             setActiveType(courseType);
                                             setDisabled(true);
                                         }}
