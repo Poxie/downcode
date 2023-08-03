@@ -2,7 +2,9 @@
 import { ResultsIcon } from '@/assets/icons/ResultsIcon';
 import { SandboxIcon } from '@/assets/icons/SandboxIcon';
 import { VideoIcon } from '@/assets/icons/VideoIcon';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { Editor } from '../editor';
+import { Preview } from '../editor/Preview';
 
 const layouts = [
     { id: 'sandbox', text: 'With sandbox', icon: <SandboxIcon className="w-7" /> },
@@ -10,11 +12,28 @@ const layouts = [
     { id: 'results', text: 'With results', icon: <ResultsIcon className="w-7" /> },
 ];
 
+const DEFAULT_CODE = {
+    html: `<!-- Your html code -->
+<p>
+  Code along while watching.
+</p>`,
+    css: `/* Your css code */
+body {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}`,
+    javascript: `// Your javascript code`
+}
+
 export const Layouts = () => {
     const [activeLayout, setActiveLayout] = useState(layouts[0].id);
+    const [code, setCode] = useState(DEFAULT_CODE);
 
     return(
-        <section className="py-section max-w-main m-auto">
+        <section className="py-section w-main max-w-main m-auto">
             <h2 className="text-3xl sm:text-4xl font-extrabold text-center">
                 An environment designed for learning.
             </h2>
@@ -41,6 +60,31 @@ export const Layouts = () => {
                     )
                 })}
             </ul>
+
+            <div className="pt-8">
+                <div className="flex gap-[7px] border-[1px] bg-secondary border-tertiary p-4 rounded-t-xl">
+                    <div className="w-3 h-3 bg-[#C15344] rounded-full" />
+                    <div className="w-3 h-3 bg-[#BFC144] rounded-full" />
+                    <div className="w-3 h-3 bg-[#5DC144] rounded-full" />
+                </div>
+                <div className="flex flex-col md:flex-row min-h-[480px] bg-secondary border-[1px] border-t-0 border-tertiary rounded-b-xl">
+                    <div className="aspect-video md:w-[60%] mb-0 md:mb-4 m-4  bg-tertiary rounded-md" />
+                    
+                    <div className="flex flex-col flex-1 border-l-[1px] border-tertiary p-4 overflow-hidden">
+                        <Editor 
+                            onChange={(language, code) => setCode(prev => ({
+                                ...prev,
+                                [language]: code
+                            }))}
+                            defaultCode={code}
+                        />
+                        <span className="text-xs text-secondary font-semibold my-2">
+                            Preview
+                        </span>
+                        <Preview {...code} />
+                    </div>
+                </div>
+            </div>
         </section>
     )
 }
