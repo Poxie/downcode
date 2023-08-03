@@ -10,7 +10,8 @@ const layouts = [
     { id: 'sandbox', text: 'With sandbox', icon: <SandboxIcon className="w-7" /> },
     { id: 'video', text: 'Just video', icon: <VideoIcon className="w-7" /> },
     { id: 'results', text: 'With results', icon: <ResultsIcon className="w-7" /> },
-];
+] as const;
+type LayoutType = 'sandbox' | 'video' | 'results';
 
 const DEFAULT_CODE = {
     html: `<!-- Your html code -->
@@ -29,7 +30,7 @@ body {
 }
 
 export const Layouts = () => {
-    const [activeLayout, setActiveLayout] = useState(layouts[0].id);
+    const [activeLayout, setActiveLayout] = useState<LayoutType>(layouts[0].id);
     const [code, setCode] = useState(DEFAULT_CODE);
 
     return(
@@ -68,21 +69,44 @@ export const Layouts = () => {
                     <div className="w-3 h-3 bg-[#5DC144] rounded-full" />
                 </div>
                 <div className="flex flex-col md:flex-row min-h-[480px] bg-secondary border-[1px] border-t-0 border-tertiary rounded-b-xl">
-                    <div className="aspect-video md:w-[60%] mb-0 md:mb-4 m-4  bg-tertiary rounded-md" />
+                    <div className={`aspect-video md:w-[60%] mb-0 md:mb-4 ${activeLayout === 'video' ? 'mx-auto my-4' : 'm-4'} bg-tertiary rounded-md`} />
                     
-                    <div className="flex flex-col flex-1 border-l-[1px] border-tertiary p-4 overflow-hidden">
-                        <Editor 
-                            onChange={(language, code) => setCode(prev => ({
-                                ...prev,
-                                [language]: code
-                            }))}
-                            defaultCode={code}
-                        />
-                        <span className="text-xs text-secondary font-semibold my-2">
-                            Preview
-                        </span>
-                        <Preview {...code} />
-                    </div>
+                    {activeLayout !== 'video' && (
+                        <div className="flex flex-col flex-1 border-l-[1px] border-tertiary p-4 overflow-hidden">
+                            {activeLayout === 'sandbox' && (
+                                <>
+                                <Editor 
+                                    onChange={(language, code) => setCode(prev => ({
+                                        ...prev,
+                                        [language]: code
+                                    }))}
+                                    defaultCode={code}
+                                />
+                                <span className="text-xs text-secondary font-semibold my-2">
+                                    Preview
+                                </span>
+                                <Preview {...code} />
+                                </>
+                            )}
+                            {activeLayout === 'results' && (
+                                <>
+                                <span className="text-xs text-secondary font-semibold mb-2">
+                                    Lecture end results
+                                </span>
+                                <div className="flex gap-3">
+                                    <div className="aspect-video bg-tertiary rounded-md w-44" />
+                                    <div>
+                                        <div className="h-6 w-[160px] bg-tertiary rounded-md mb-1" />
+                                        <div className="flex gap-1">
+                                            <div className="h-4 w-[70px] bg-tertiary rounded-md" />
+                                            <div className="h-4 w-[40px] bg-tertiary rounded-md" />
+                                        </div>
+                                    </div>
+                                </div>
+                                </>
+                            )}
+                        </div>
+                    )}
                 </div>
             </div>
         </section>
