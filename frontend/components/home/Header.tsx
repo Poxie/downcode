@@ -8,7 +8,7 @@ export const Header = () => {
                     The fastest way to learn to code. For <span className="text-c-primary">pros</span> and <span className="text-c-primary">newbies</span>.
                 </h1>
                 <p className="sm:text-md md:text-xl text-center text-secondary">
-                    Are you just learning to code, or have you been coding for years? Either way you will learn something new; coding is impossible to master.
+                    Are you just learning to code or have you been coding for years? Either way you will learn something new; coding is impossible to master.
                 </p>
                 <div className="flex gap-5">
                     <Button 
