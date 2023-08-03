@@ -81,11 +81,6 @@ export const Questions = () => {
                     </React.Fragment>
                 ))}
             </ul>
-
-            <WaveIcon 
-                fill={backgrounds?.secondary as string}
-                className="absolute top-full rotate-180"
-            />
         </section>
     )
 }
