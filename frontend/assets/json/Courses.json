@@ -1,0 +1,71 @@
+{
+    "beginner": [
+        {
+            "title": "HTML 101",
+            "description": "Learn HTML from the ground up - no previous knowledge required.",
+            "estimatedTime": "Estimated time 5 hours",
+            "icon": "html",
+            "path": "/courses/html"
+        },
+        {
+            "title": "CSS 101",
+            "description": "Learn CSS from the ground up - no previous knowledge required.",
+            "estimatedTime": "Estimated time 9 hours",
+            "icon": "css",
+            "path": "/courses/css"
+        },
+        {
+            "title": "JavaScript 101",
+            "description": "Learn JavaScript from the ground up - no previous knowledge required.",
+            "estimatedTime": "Estimated time 14 hours",
+            "icon": "javascript",
+            "path": "/courses/javascript"
+        }
+    ],
+    "intermediate": [
+        {
+            "title": "React 101",
+            "description": "Learn React from the ground up - no previous knowledge required.",
+            "estimatedTime": "Estimated time 3 hours",
+            "icon": "react",
+            "path": "/courses/react"
+        },
+        {
+            "title": "Next 101",
+            "description": "Learn Next from the ground up - no previous knowledge required.",
+            "estimatedTime": "Estimated time 9 hours",
+            "icon": "next",
+            "path": "/courses/next"
+        },
+        {
+            "title": "JavaScript 101",
+            "description": "Learn JavaScript from the ground up - no previous knowledge required.",
+            "estimatedTime": "Estimated time 14 hours",
+            "icon": "javascript",
+            "path": "/courses/tets"
+        }
+    ],
+    "pro": [
+        {
+            "title": "React 101",
+            "description": "Learn React from the ground up - no previous knowledge required.",
+            "estimatedTime": "Estimated time 3 hours",
+            "icon": "react",
+            "path": "/courses/react"
+        },
+        {
+            "title": "CSS 101",
+            "description": "Learn CSS from the ground up - no previous knowledge required.",
+            "estimatedTime": "Estimated time 9 hours",
+            "icon": "css",
+            "path": "/courses/css"
+        },
+        {
+            "title": "JavaScript 101",
+            "description": "Learn JavaScript from the ground up - no previous knowledge required.",
+            "estimatedTime": "Estimated time 14 hours",
+            "icon": "javascript",
+            "path": "/courses/javascript"
+        }
+    ]
+}
