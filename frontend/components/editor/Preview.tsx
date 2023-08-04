@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useRef } from 'react';
 
+// STRICTLY TEMPORARY. IFRAMES CAN USE window.parent.window TO ACCESS THE PARENT WINDOW
+// WHICH IN TURN CAN ACCESS THINGS SUCH AS COOKIES, LOCALSTORAGE, ETC. LARGE SECURITY FLAW.
 export const Preview: React.FC<{
     html: string;
     css: string;
