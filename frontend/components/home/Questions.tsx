@@ -50,10 +50,10 @@ export const Questions = () => {
                 className="absolute bottom-full"
             />
 
-            <h2 className="text-4xl text-center font-extrabold max-w-main m-auto">
+            <h2 className="text-3xl sm:text-4xl text-center font-extrabold max-w-main m-auto">
                 An environment meant for questions.
             </h2>
-            <p className="text-lg text-secondary text-center mt-4 mb-8 w-[900px] max-w-main mx-auto">
+            <p className="text-md sm:text-lg text-secondary text-center mt-4 mb-8 w-[900px] max-w-main mx-auto">
                 Questions will always appear while learning to code. View others’ questions and answers, or contact us directly if your question is still unanswered.
             </p>
             <ul className="flex flex-col md:flex-row gap-8 w-main max-w-main m-auto">
