@@ -56,13 +56,13 @@ export const Questions = () => {
             <p className="text-md sm:text-lg text-secondary text-center mt-4 mb-8 w-[900px] max-w-main mx-auto">
                 Questions will always appear while learning to code. View others’ questions and answers, or contact us directly if your question is still unanswered.
             </p>
-            <ul className="flex flex-col md:flex-row gap-8 w-main max-w-main m-auto">
+            <div className="flex flex-col md:flex-row gap-8 w-main max-w-main m-auto">
                 {ITEMS.map((item, key) => (
                     <React.Fragment key={item.title}>
                         {key !== 0 && (
                             <div className="relative before:-top-3 before:left-[50%] before:-translate-x-[50%] before:rotate-90 md:before:rotate-0 md:before:top-[50%] md:before:-translate-y-[50%] md:before:-left-[18px] md:before:translate-x-0 before:w-[14px] before:h-[4px] before:bg-quaternary before:block before:absolute before:rounded after:top-3 after:left-[50%] after:-translate-x-[50%] after:rotate-90 md:after:rotate-0 md:after:top-[50%] md:after:-translate-y-[50%] md:after:left-[4px] md:after:translate-x-0 after:w-[14px] after:h-[4px] after:bg-quaternary after:block after:absolute after:rounded" />
                         )}
-                        <li className="flex flex-col w-full sm:w-[350px] m-auto md:m-[unset] md:w-[unset] md:flex-1 flex-grow">
+                        <div className="flex flex-col w-full sm:w-[350px] m-auto md:m-[unset] md:w-[unset] md:flex-1 flex-grow">
                             <div className="flex gap-[7px] border-[1px] bg-tertiary border-quaternary p-4 rounded-t-xl">
                                 <div className="w-3 h-3 bg-[#C15344] rounded-full" />
                                 <div className="w-3 h-3 bg-[#BFC144] rounded-full" />
@@ -77,10 +77,10 @@ export const Questions = () => {
                                 </span>
                                 {item.extra}
                             </div>
-                        </li>
+                        </div>
                     </React.Fragment>
                 ))}
-            </ul>
+            </div>
         </section>
     )
 }
