@@ -15,7 +15,10 @@ export const Navbar = () => {
         <nav className="w-full absolute">
             <div className="w-main max-w-main m-auto py-4 sm:py-7 flex justify-between items-center">
                 <div className="flex items-center gap-6">
-                    <Link href={'/'}>
+                    <Link 
+                        href={'/'}
+                        aria-label="Home"
+                    >
                         <LogoIcon />
                     </Link>
                     <ul className="flex gap-3">
