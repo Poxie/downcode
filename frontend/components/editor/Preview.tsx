@@ -50,6 +50,7 @@ export const Preview: React.FC<{
 
     return(
         <iframe 
+            title={'Code preview'}
             className="rounded-md bg-tertiary"
             ref={sandbox} 
         />
