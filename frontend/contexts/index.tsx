@@ -1,9 +1,12 @@
+import { AuthProvider } from "./auth";
 import { ModalProvider } from "./modal";
 
 export const Providers: React.FC<{
     children: React.ReactNode;
 }> = ({ children }) => (
-    <ModalProvider>
-        {children}
-    </ModalProvider>
+    <AuthProvider>
+        <ModalProvider>
+            {children}
+        </ModalProvider>
+    </AuthProvider>
 )
