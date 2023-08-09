@@ -19,7 +19,8 @@ export const Button: React.FC<{
     onClick?: () => void;
     href?: string;
     className?: string;
-}> = ({ children, onClick, href, className, type='primary' }) => {
+    disabled?: boolean;
+}> = ({ children, onClick, href, className, disabled, type='primary' }) => {
     const background = typeToBackground(type);
     const backgroundHover = typeToHover(type);
 
@@ -36,6 +37,7 @@ export const Button: React.FC<{
             <button 
                 className={className}
                 onClick={onClick}
+                disabled={disabled}
             >
                 {children}
             </button>
