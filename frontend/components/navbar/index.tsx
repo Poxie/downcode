@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from 'framer-motion';
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { LogoIcon } from "@/assets/icons/LogoIcon"
 import { Button } from "../button";
 import { usePathname } from "next/navigation";
@@ -16,9 +16,22 @@ const TABS = [
     { text: 'Home', path: '/' },
     { text: 'Courses', path: '/courses' },
 ];
-const USER_TABS = [
-    { text: 'My profile', path: '/profile' },
-    { text: 'My learning', path: '/learning' },
+const USER_GROUPS: {
+    text: string;
+    path?: string;
+    onClick?: () => void;
+    type?: 'danger'
+}[][] = [
+    [
+        { text: 'My profile', path: '/profile' },
+        { text: 'My learning', path: '/learning' },
+    ],
+    [
+        { text: 'Logout', type: 'danger', onClick: () => {
+            window.localStorage.removeItem('accessToken');
+            window.location.href = window.location.origin;
+        } }
+    ]
 ]
 
 export const Navbar = () => {
@@ -115,17 +128,39 @@ export const Navbar = () => {
                                         initial={{ scale: .95, opacity: 0 }}
                                         exit={{ scale: .95, opacity: 0 }}
                                         transition={{ duration: .1 }}
-                                        className="absolute right-0 top-[110%] bg-primary rounded-md p-2 min-w-[220px] grid"
+                                        className="absolute right-0 top-[110%] bg-primary rounded-md p-2 min-w-[220px]"
                                         ref={popup}
                                     >
-                                        {USER_TABS.map(tab => (
-                                            <Link 
-                                                className="text-sm text-secondary py-2.5 px-3 rounded-md transition-colors hover:bg-secondary hover:text-primary"
-                                                href={tab.path}
-                                                key={tab.path}
-                                            >
-                                                {tab.text}
-                                            </Link>
+                                        {USER_GROUPS.map((group, key) => (
+                                            <React.Fragment key={key}>
+                                            {key !== 0 && (
+                                                <div className="my-2.5 mx-3 h-[1px] bg-tertiary" />
+                                            )}
+                                            <ul className="grid">
+                                                {group.map(tab => {
+                                                    const className = "text-left text-sm py-2.5 px-3 rounded-md transition-colors hover:bg-secondary " + (tab.type === 'danger' ? 'text-red-400 hover:text-red-600' : 'text-secondary hover:text-primary');
+                                                    return(
+                                                        tab.path ? (
+                                                            <Link 
+                                                                className={className}
+                                                                href={tab.path}
+                                                                key={tab.text}
+                                                            >
+                                                                {tab.text}
+                                                            </Link>
+                                                        ) : (
+                                                            <button
+                                                                className={className}
+                                                                onClick={tab.onClick}
+                                                                key={tab.text}
+                                                            >
+                                                                {tab.text}
+                                                            </button>
+                                                        )
+                                                    )
+                                                })}
+                                            </ul>
+                                            </React.Fragment>
                                         ))}
                                     </motion.ul>
                                 )}
