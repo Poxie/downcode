@@ -163,7 +163,7 @@ export const EditProfile = () => {
                     )}
                     <Button 
                         onClick={updateProfile}
-                        disabled={loading || !changesHaveBeenMade}
+                        disabled={loading || !changesHaveBeenMade || feedback}
                     >
                         {loading ? 'Saving changes...' : (
                             changesHaveBeenMade ? (
