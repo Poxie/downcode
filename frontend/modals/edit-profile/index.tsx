@@ -41,6 +41,11 @@ export const EditProfile = () => {
         patch<User>(`/users/me`, notSameProperties)
             .then(user => {
                 setFeedback('Changes have been updated.');
+
+                if(notSameProperties.avatar) {
+                    notSameProperties.avatar = user.avatar;
+                }
+
                 dispatch(updateUser({ id: user.id, changes: notSameProperties }));
             })
             .catch(error => {
