@@ -7,4 +7,5 @@ export const MAXIMUM_USERNAME_LENGTH = 20;
 export const MINIMUM_PASSWORD_LENGTH = 4;
 export const MAXIMUM_PASSWORD_LENGTH = 32;
 
-export const ALLOWED_USER_UPDATE_PROPS = ['displayName'];
+export const ALLOWED_USER_UPDATE_PROPS = ['displayName', 'avatar'];
+export const ALLOWED_FILE_EXTENSIONS = ['image/png', 'image/jpg', 'image/jpeg'];

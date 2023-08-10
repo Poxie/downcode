@@ -1,10 +1,11 @@
 import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 import * as express from 'express';
+import * as imageDataURI from 'image-data-uri';
 import { Request, Response } from 'express';
 import { myDataSource } from '../app-data-source';
 import { User } from '../entity/user.entity';
-import { ALLOWED_USER_UPDATE_PROPS, MAXIMUM_PASSWORD_LENGTH, MAXIMUM_USERNAME_LENGTH, MINIMUM_PASSWORD_LENGTH, MINIMUM_USERNAME_LENGTH, SALT_ROUNDS } from '../constants';
+import { ALLOWED_FILE_EXTENSIONS, ALLOWED_USER_UPDATE_PROPS, MAXIMUM_PASSWORD_LENGTH, MAXIMUM_USERNAME_LENGTH, MINIMUM_PASSWORD_LENGTH, MINIMUM_USERNAME_LENGTH, SALT_ROUNDS } from '../constants';
 
 const router = express.Router();
 
@@ -118,9 +119,33 @@ router.patch(`/:userId`, async (req: Request, res: Response) => {
     if(userId !== selfId) return res.status(401).send({ message: 'Unauthorized.' });
 
     const propsToUpdate = {};
-    for(const [prop, value] of Object.entries(req.body)) {
+    for(const [prop, value] of Object.entries(req.body as {[key: string]: any})) {
         if(!ALLOWED_USER_UPDATE_PROPS.includes(prop)) {
             return res.status(400).send({ message: `${prop} is an invalid update property.` });
+        }
+
+        if(prop === 'avatar') {
+            // If avatar value is null, remove current avatar
+            if(!value) {
+                propsToUpdate['avatar'] = null;
+                continue;
+            }
+
+            // Checking if image type is supported
+            if(!ALLOWED_FILE_EXTENSIONS.includes(value.split(':')[1].split(';')[0]?.toLowerCase())) {
+                return res.status(400).send({ message: 'The uploaded avatar file is an unsupported file type.' });
+            }
+            
+            let avatarResponse: string;
+            try {
+                avatarResponse = await imageDataURI.outputFile(value, `./src/cdn/avatar/${selfId}-${Date.now()}`);
+            } catch(error) {
+                console.error(error);
+                return res.status(500).send({ message: 'Unable to upload avatar.' });
+            }
+
+            propsToUpdate['avatar'] = avatarResponse.split('/').at(-1);
+            continue;
         }
 
         propsToUpdate[prop] = value;
