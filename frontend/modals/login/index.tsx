@@ -42,8 +42,6 @@ export const LoginModal = () => {
         })
         .catch(error => {
             setError(error.message);
-        })
-        .finally(() => {
             setLoading(false);
         })
     }
