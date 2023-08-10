@@ -49,7 +49,7 @@ export const EditProfile = () => {
         setFeedback('');
         setTempUser(prev => ({
             ...prev,
-            [property]: value
+            [property]: value === '' ? null : value
         }))
     }
 
@@ -64,6 +64,16 @@ export const EditProfile = () => {
         fileReader.onload = () => {
             updateTempUser('avatar', fileReader.result);
             e.target.value = '';
+        }
+    }
+
+    let changesHaveBeenMade = false;
+    for(const [key, value] of Object.entries(tempUser)) {
+        if(!user) break;
+
+        if(user[key as keyof User] != value) {
+            changesHaveBeenMade = true;
+            break;
         }
     }
 
@@ -140,9 +150,15 @@ export const EditProfile = () => {
                     )}
                     <Button 
                         onClick={updateProfile}
-                        disabled={loading}
+                        disabled={loading || !changesHaveBeenMade}
                     >
-                        {loading ? 'Saving changes...' : 'Save changes'}
+                        {loading ? 'Saving changes...' : (
+                            changesHaveBeenMade ? (
+                                'Save changes'
+                            ) : (
+                                'No changes made'
+                            )
+                        )}
                     </Button>
                 </div>
             </div>
