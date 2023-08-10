@@ -68,8 +68,9 @@ export default function UserLayout({ children, params: { userId } }: {
                 {user?.isSelf && (
                     <Button 
                         type={'secondary'}
-                        className="border-[1px] border-quaternary text-xs px-4 py-3"
                         onClick={() => setModal(<EditProfile />)}
+                        isSmall
+                        withBorder
                     >
                         Edit profile
                     </Button>

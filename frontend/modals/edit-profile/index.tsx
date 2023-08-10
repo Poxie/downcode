@@ -112,16 +112,18 @@ export const EditProfile = () => {
                     <div className="flex gap-1.5">
                         <Button 
                             type={'secondary'}
-                            className="border-[1px] border-quaternary text-xs px-4 py-3"
                             onClick={() => avatarInput.current?.click()}
+                            isSmall
+                            withBorder
                         >
                             Change avatar
                         </Button>
                         {tempUser.avatar && (
                             <Button 
                                 type={'danger'}
-                                className="border-[1px] border-quaternary text-xs px-4 py-3"
                                 onClick={() => updateTempUser('avatar', null)}
+                                isSmall
+                                withBorder
                             >
                                 Remove avatar
                             </Button>
