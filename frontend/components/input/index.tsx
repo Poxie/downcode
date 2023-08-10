@@ -13,6 +13,7 @@ export const Input = forwardRef<HTMLInputElement, {
         <div className={"relative " + className}>
             <input 
                 placeholder=""
+                autoComplete='off'
                 className="peer p-3 bg-tertiary border-[1px] border-quaternary outline-none rounded-md w-full text-sm"
                 onChange={e => onChange(e.target.value)}
                 autoFocus={autoFocus}
@@ -23,7 +24,7 @@ export const Input = forwardRef<HTMLInputElement, {
                 ref={ref}
             />
             <label
-                className="absolute top-2/4 -mt-4 text-[10px] peer-focus:-mt-4 peer-focus:text-[10px] peer-placeholder-shown:mt-0 peer-placeholder-shown:text-sm text-secondary transition-all -translate-y-2/4 left-3 pointer-events-none"
+                className="flex items-center h-4 px-1 rounded bg-tertiary absolute left-2 top-2/4 -translate-y-2/4 text-secondary transition-all text-[8px] -mt-[20px] peer-focus:text-[8px] peer-focus:-mt-[20px] pointer-events-none peer-placeholder-shown:text-xs peer-placeholder-shown:mt-0"
                 htmlFor={name}
             >
                 {label}
