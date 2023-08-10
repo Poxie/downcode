@@ -35,7 +35,7 @@ const USER_GROUPS: {
     [
         { text: 'Logout', type: 'danger', onClick: () => {
             window.localStorage.removeItem('accessToken');
-            window.location.href = window.location.origin;
+            window.location.reload();
         } }
     ]
 ]
