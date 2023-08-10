@@ -28,7 +28,7 @@ export const Button: React.FC<{
     const background = typeToBackground(type);
     const backgroundHover = typeToHover(type);
 
-    className = `block ${!className.includes('py') ? 'py-[15px]' : ''} ${!className.includes('px') ? 'px-[20px]' : ''} rounded-lg text-sm transition-colors ${color} ${background} ${backgroundHover} focus:ring-1 focus:ring-offset-2 ` + className;
+    className = `block ${disabled ? 'opacity-50' : ''} ${!className.includes('py') ? 'py-[15px]' : ''} ${!className.includes('px') ? 'px-[20px]' : ''} rounded-lg text-sm transition-colors ${color} ${background} ${backgroundHover} focus:ring-1 focus:ring-offset-2 ` + className;
     return(
         href ? (
             <Link 
