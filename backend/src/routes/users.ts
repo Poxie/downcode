@@ -91,11 +91,9 @@ router.post("/", async (req: Request, res: Response) => {
     });
     await myDataSource.getRepository(User).save(newUser);
 
-    // Fetching created user
-    const selfId = await getUserIdFromHeaders(req.headers);
-    const user = await getUser(newUser.id, selfId);
+    const token = jwt.sign({ userId: newUser.id }, process.env.JWT_PRIVATE_KEY);
 
-    return res.send(user);
+    return res.json({ token });
 })
 
 // Route to get a specific user
