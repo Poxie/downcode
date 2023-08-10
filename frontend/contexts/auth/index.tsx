@@ -9,6 +9,7 @@ type AuthContextType = {
     token: string | null;
     get: <T>(query: string) => Promise<T>;
     post: <T>(query: string, body?: Object) => Promise<T>;
+    patch: <T>(query: string, body?: Object) => Promise<T>;
 }
 const AuthContext = React.createContext<AuthContextType | null>(null);
 
@@ -56,12 +57,33 @@ export const AuthProvider: React.FC<{
 
     const post: AuthContextType['post'] = useCallback(async (query, body={}) => (
         fetch(`${process.env.NEXT_PUBLIC_BACKEND_ORIGIN}${query}`, {
+            method: 'POST',
             body: JSON.stringify(body),
             headers: {
-                'Authorization': `Bearer ${token}`
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
             }
         })
-        .then(res => res.json())
+        .then(async res => {
+            if(!res.ok) throw new Error((await res.json()).message);
+            return await res.json();
+        })
+        .then(res => res)
+    ), [token]);
+
+    const patch: AuthContextType['patch'] = useCallback(async (query, body={}) => (
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND_ORIGIN}${query}`, {
+            method: 'PATCH',
+            body: JSON.stringify(body),
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(async res => {
+            if(!res.ok) throw new Error((await res.json()).message);
+            return await res.json();
+        })
         .then(res => res)
     ), [token]);
 
@@ -69,6 +91,7 @@ export const AuthProvider: React.FC<{
         user,
         get,
         post,
+        patch,
         loading,
         token,
     }
