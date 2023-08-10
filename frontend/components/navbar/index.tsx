@@ -44,6 +44,8 @@ export const Navbar = () => {
     const userButton = useRef<HTMLButtonElement>(null);
     const popup = useRef<HTMLUListElement>(null);
 
+    useEffect(() => setOpenUser(false), [asPath]);
+
     useEffect(() => {
         const handleClickOutside = (e: MouseEvent) => {
             if(userButton.current?.contains(e.target as Node)) return;
