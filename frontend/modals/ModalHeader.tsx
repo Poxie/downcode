@@ -3,9 +3,9 @@ export const ModalHeader: React.FC<{
     subHeader?: string;
     headerClassName?: string;
 }> = ({ children, subHeader, headerClassName='' }) => {
-    headerClassName = "text-2xl font-semibold " + headerClassName
+    headerClassName = "text-xl font-semibold " + headerClassName
     return(
-        <div className="p-6">
+        <div className="p-4">
             <h2 className={headerClassName}>
                 {children}
             </h2>
