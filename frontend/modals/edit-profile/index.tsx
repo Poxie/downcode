@@ -5,6 +5,7 @@ import { ChangeEvent, useMemo, useRef, useState } from "react";
 import { Button } from "@/components/button";
 import { User } from "@/types";
 import { AccountIcon } from "@/assets/icons/AccountIcon";
+import { getUserAvatar } from "@/utils/getImages";
 
 export const EditProfile = () => {
     const { user, patch } = useAuth();
@@ -56,18 +57,15 @@ export const EditProfile = () => {
         if(!e.target.files) return;
 
         const file = e.target.files[0];
-        updateTempUser('avatar', file);
-        
-        e.target.value = '';
-    }
 
-    const avatarURL = useMemo(() => {
-        let avatarURL = tempUser.avatar;
-        if(tempUser.avatar !== null && typeof tempUser.avatar === 'object') {
-            avatarURL = URL.createObjectURL(tempUser.avatar);
+        const fileReader = new FileReader();
+        fileReader.readAsDataURL(file);
+
+        fileReader.onload = () => {
+            updateTempUser('avatar', fileReader.result);
+            e.target.value = '';
         }
-        return avatarURL;
-    }, [tempUser?.avatar]);
+    }
 
     return(
         <>
@@ -78,11 +76,17 @@ export const EditProfile = () => {
                 <div className="flex gap-3 items-start pb-4">
                     <div 
                         className="group relative flex justify-center items-center w-[100px] h-[100px] rounded-md bg-tertiary border-[1px] border-quaternary bg-cover bg-center"
-                        style={avatarURL ? { 
-                            backgroundImage: `url(${avatarURL})` 
+                        style={tempUser.avatar ? { 
+                            backgroundImage: `url(${(
+                                tempUser.avatar.startsWith('data') ? (
+                                    tempUser.avatar
+                                ) : (
+                                    getUserAvatar(tempUser.avatar)
+                                )
+                            )})` 
                         } : undefined}
                     >
-                        {!avatarURL && (
+                        {!tempUser.avatar && (
                             <AccountIcon className="w-7 text-secondary transition-opacity opacity-100 group-hover:opacity-0" />
                         )}
                         <span className="pointer-events-none flex justify-center items-center bg-tertiary bg-opacity-75 absolute top-0 left-0 w-full h-full z-10 whitespace-nowrap text-xs text-primary transition-opacity opacity-0 group-hover:opacity-100">
@@ -103,7 +107,7 @@ export const EditProfile = () => {
                         >
                             Change avatar
                         </Button>
-                        {avatarURL && (
+                        {tempUser.avatar && (
                             <Button 
                                 type={'danger'}
                                 className="border-[1px] border-quaternary text-xs px-4 py-3"

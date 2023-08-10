@@ -2,7 +2,9 @@ declare global {
     namespace NodeJS {
         interface ProcessEnv {
             NODE_ENV: 'development' | 'production';
+            CDN_HOST: string;
             NEXT_PUBLIC_BACKEND_ORIGIN: string;
+            NEXT_PUBLIC_CDN_ORIGIN: string;
         }
     }
 }

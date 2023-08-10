@@ -9,6 +9,8 @@ import { usePathname } from 'next/navigation';
 import { Button } from '@/components/button';
 import { EditProfile } from '@/modals/edit-profile';
 import { useModal } from '@/contexts/modal';
+import Image from 'next/image';
+import { getUserAvatar } from '@/utils/getImages';
 
 const PROFILE_TABS = [
     { text: 'Profile', path: 'profile' },
@@ -38,8 +40,18 @@ export default function UserLayout({ children, params: { userId } }: {
         >
             <div className="flex items-start justify-between gap-4 p-4 bg-secondary border-[1px] border-tertiary rounded-lg">
                 <div className='flex gap-4'>
-                    <div className="flex items-center justify-center text-3xl font-bold w-[100px] h-[100px] rounded-lg bg-tertiary border-[1px] border-quaternary">
-                        ?
+                    <div className="flex justify-center items-center w-[100px] h-[100px] rounded-md bg-tertiary border-[1px] border-quaternary overflow-hidden">
+                        {user?.avatar ? (
+                            <Image 
+                                width={100}
+                                height={100}
+                                src={getUserAvatar(user.avatar)}
+                                alt={`${user.username}'s avatar`}
+                                className='w-full h-full object-cover'
+                            />
+                        ) : (
+                            <AccountIcon className="w-7 text-secondary transition-opacity opacity-100 group-hover:opacity-0" />
+                        )}
                     </div>
                     <div className="flex flex-col gap-2">
                         <span className="text-xl font-semibold">
