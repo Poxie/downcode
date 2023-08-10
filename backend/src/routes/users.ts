@@ -13,7 +13,7 @@ export const getUser = async (userId: string | null, selfId?: string) => {
     if(!userId) return;
 
     const user = await myDataSource.getRepository(User).findOne({
-        select: ['id', 'displayName', 'username', 'isStaff', 'createdAt'],
+        select: ['id', 'displayName', 'username', 'avatar', 'isStaff', 'createdAt'],
         where: { id: userId }
     })
     if(!user) return user;
@@ -100,7 +100,7 @@ router.post("/", async (req: Request, res: Response) => {
 // Route to get all users
 router.get("/", async (req: Request, res: Response) => {
     const users = await myDataSource.getRepository(User).find({
-        select: ['id', 'displayName', 'username', 'isStaff']
+        select: ['id', 'displayName', 'username', 'avatar', 'isStaff']
     })
     res.json(users);
 })
