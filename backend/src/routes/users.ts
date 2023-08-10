@@ -4,7 +4,7 @@ import * as express from 'express';
 import { Request, Response } from 'express';
 import { myDataSource } from '../app-data-source';
 import { User } from '../entity/user.entity';
-import { MAXIMUM_PASSWORD_LENGTH, MAXIMUM_USERNAME_LENGTH, MINIMUM_PASSWORD_LENGTH, MINIMUM_USERNAME_LENGTH, SALT_ROUNDS } from '../constants';
+import { ALLOWED_USER_UPDATE_PROPS, MAXIMUM_PASSWORD_LENGTH, MAXIMUM_USERNAME_LENGTH, MINIMUM_PASSWORD_LENGTH, MINIMUM_USERNAME_LENGTH, SALT_ROUNDS } from '../constants';
 
 const router = express.Router();
 
@@ -116,6 +116,37 @@ router.get('/:userId', async (req: Request, res: Response) => {
     if(!user) return res.status(404).send({ message: 'User not found.' });
 
     return res.json(user);
+})
+
+// Route to update a user
+router.patch(`/:userId`, async (req: Request, res: Response) => {
+    const selfId = await getUserIdFromHeaders(req.headers);
+    let userId = req.params.userId === 'me' ? selfId : req.params.userId;
+
+    if(userId !== selfId) return res.status(401).send({ message: 'Unauthorized.' });
+
+    const propsToUpdate = {};
+    for(const [prop, value] of Object.entries(req.body)) {
+        if(!ALLOWED_USER_UPDATE_PROPS.includes(prop)) {
+            return res.status(400).send({ message: `${prop} is an invalid update property.` });
+        }
+
+        propsToUpdate[prop] = value;
+    }
+
+    if(!Object.keys(propsToUpdate).length) {
+        return res.status(400).send({ message: 'No properties to update were provided.' });
+    }
+
+    myDataSource.getRepository(User).update({ id: selfId }, propsToUpdate)
+        .then(async () => {
+            const user = await getUser(selfId);
+            res.json(user);
+        })
+        .catch(error => {
+            console.error(error);
+            res.status(500).send({ message: 'An internal error occured.' });
+        });
 })
 
 export default router;
