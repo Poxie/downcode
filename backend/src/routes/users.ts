@@ -147,6 +147,14 @@ router.patch(`/:userId`, async (req: Request, res: Response) => {
             propsToUpdate['avatar'] = avatarResponse.split('/').at(-1);
             continue;
         }
+        
+        if(prop === 'username') {
+            if(value.length < MINIMUM_USERNAME_LENGTH) return res.status(400).send({ message: `Username must contain at least ${MINIMUM_PASSWORD_LENGTH} characters.` });
+            if(value.length > MAXIMUM_USERNAME_LENGTH) return res.status(400).send({ message: `Username must contain a maximum of ${MAXIMUM_USERNAME_LENGTH} characters.` });
+            if(await myDataSource.getRepository(User).findOneBy({ username: value })) {
+                return res.status(403).send({ message: 'Username is already taken.' });
+            }
+        }
 
         propsToUpdate[prop] = value;
     }
