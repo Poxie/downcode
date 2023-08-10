@@ -23,12 +23,15 @@ export const Button: React.FC<{
     href?: string;
     className?: string;
     disabled?: boolean;
-}> = ({ children, onClick, href, disabled, className='', type='primary' }) => {
+    isSmall?: boolean;
+    withBorder?: boolean;
+}> = ({ children, onClick, href, disabled, isSmall, withBorder, className='', type='primary' }) => {
     const color = typeToColor(type);
     const background = typeToBackground(type);
     const backgroundHover = typeToHover(type);
 
-    className = `block ${disabled ? 'opacity-50' : ''} ${!className.includes('py') ? 'py-[15px]' : ''} ${!className.includes('px') ? 'px-[20px]' : ''} rounded-lg text-sm transition-colors ${color} ${background} ${backgroundHover} focus:ring-1 focus:ring-offset-2 ` + className;
+    const buttonSpacing = isSmall ? 'text-xs px-4 py-3' : 'py-[15px] px-[20px]';
+    className = `block ${disabled ? 'opacity-50' : ''} ${buttonSpacing} ${withBorder ? 'border-[1px] border-quaternary' : ''} rounded-lg text-sm transition-colors ${color} ${background} ${backgroundHover} focus:ring-1 focus:ring-offset-2 ` + className;
     return(
         href ? (
             <Link 
