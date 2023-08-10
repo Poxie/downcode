@@ -33,9 +33,8 @@ export default function UserLayout({ children, params: { userId } }: {
     const timeFormater = Intl.DateTimeFormat('en', { dateStyle: 'medium' });
     return(
         <main 
-            className="w-main max-w-main mx-auto"
             // 100dvh for full height - 200px (100px for navbar height, 100px for footer height)
-            style={{ minHeight: `calc(100dvh - 200px)` }}
+            className="w-main max-w-main mx-auto min-h-[calc(100dvh-200px)]"
         >
             <div className="flex items-start justify-between gap-4 p-4 bg-secondary border-[1px] border-tertiary rounded-lg">
                 <div className='flex gap-4'>
