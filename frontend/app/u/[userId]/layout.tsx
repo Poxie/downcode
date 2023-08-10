@@ -7,6 +7,8 @@ import { AccountIcon } from '@/assets/icons/AccountIcon';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/button';
+import { EditProfile } from '@/modals/edit-profile';
+import { useModal } from '@/contexts/modal';
 
 const PROFILE_TABS = [
     { text: 'Profile', path: 'profile' },
@@ -18,6 +20,7 @@ export default function UserLayout({ children, params: { userId } }: {
     params: { userId: string };
 }) {
     const asPath = usePathname();
+    const { setModal } = useModal();
     const { get, loading } = useAuth();
 
     const [user, setUser] = useState<User | null>(null);
@@ -41,7 +44,7 @@ export default function UserLayout({ children, params: { userId } }: {
                     </div>
                     <div className="flex flex-col gap-2">
                         <span className="text-xl font-semibold">
-                            {user?.username}
+                            {user?.displayName || user?.username}
                         </span>
                         <div className="flex gap-2 items-center text-secondary">
                             <AccountIcon className="w-[16px] h-[20px]" />
@@ -55,6 +58,7 @@ export default function UserLayout({ children, params: { userId } }: {
                     <Button 
                         type={'secondary'}
                         className="border-[1px] border-quaternary text-xs px-4 py-3"
+                        onClick={() => setModal(<EditProfile />)}
                     >
                         Edit profile
                     </Button>
