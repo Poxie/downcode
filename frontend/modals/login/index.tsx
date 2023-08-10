@@ -85,7 +85,7 @@ export const LoginModal = () => {
                 </button>
                 <Button 
                     className="min-w-28"
-                    disabled={loading}
+                    disabled={loading || !!error}
                 >
                     {loading ? 'Signing in...' : 'Sign in'}
                 </Button>
