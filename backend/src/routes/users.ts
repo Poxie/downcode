@@ -97,14 +97,6 @@ router.post("/", async (req: Request, res: Response) => {
     return res.send(user);
 })
 
-// Route to get all users
-router.get("/", async (req: Request, res: Response) => {
-    const users = await myDataSource.getRepository(User).find({
-        select: ['id', 'displayName', 'username', 'avatar', 'isStaff']
-    })
-    res.json(users);
-})
-
 // Route to get a specific user
 router.get('/:userId', async (req: Request, res: Response) => {
     let userId = req.params.userId;
