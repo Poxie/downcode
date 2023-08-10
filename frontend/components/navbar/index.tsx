@@ -13,6 +13,9 @@ import { useAuth } from "@/contexts/auth";
 import { AnimatePresence } from "framer-motion";
 import { useAppSelector } from "@/redux/store";
 import { selectSelf } from "@/redux/slices/users";
+import { AccountIcon } from "@/assets/icons/AccountIcon";
+import Image from "next/image";
+import { getUserAvatar } from "@/utils/getImages";
 
 const TABS = [
     { text: 'Home', path: '/' },
@@ -93,7 +96,7 @@ export const Navbar = () => {
                     </ul>
                 </div>
                 <div className="flex gap-3">
-                    {!token ? (
+                    {!user ? (
                         <>
                         <Button 
                             type={'transparent'}
@@ -112,20 +115,22 @@ export const Navbar = () => {
                                 onClick={() => setOpenUser(!openUser)}
                                 ref={userButton}
                             >
-                                {!user ? (
-                                    <>
-                                    <span className="w-7 h-7 rounded-full"></span>
-                                    </>
-                                ) : (
-                                    <>
-                                    <span className="flex items-center justify-center text-sm font-semibold w-7 h-7 rounded-full bg-secondary">
-                                        ?
-                                    </span>
-                                    <span className="text-base">
-                                        {user.displayName || user.username}
-                                    </span>
-                                    </>
-                                )}
+                                <div className="flex items-center justify-center w-7 h-7 rounded-full overflow-hidden">
+                                    {user.avatar ? (
+                                        <Image 
+                                            width={100}
+                                            height={100}
+                                            src={getUserAvatar(user.avatar)}
+                                            alt={`${user.username}'s avatar`}
+                                            className="w-full h-full object-cover"
+                                        />
+                                    ) : (
+                                        <AccountIcon className="w-5" />
+                                    )}
+                                </div>
+                                <span className="text-base">
+                                    {user.displayName || user.username}
+                                </span>
                             </button>
 
                             <AnimatePresence>
