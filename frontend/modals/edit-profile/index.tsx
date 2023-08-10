@@ -6,9 +6,14 @@ import { Button } from "@/components/button";
 import { User } from "@/types";
 import { AccountIcon } from "@/assets/icons/AccountIcon";
 import { getUserAvatar } from "@/utils/getImages";
+import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { selectSelf, updateUser } from "@/redux/slices/users";
 
 export const EditProfile = () => {
-    const { user, patch } = useAuth();
+    const dispatch = useAppDispatch();
+    const { patch } = useAuth();
+
+    const user = useAppSelector(selectSelf);
 
     const [tempUser, setTempUser] = useState<Partial<User>>(user || {});
     const [loading, setLoading] = useState(false);
@@ -35,7 +40,8 @@ export const EditProfile = () => {
         setLoading(true);
         patch<User>(`/users/me`, notSameProperties)
             .then(user => {
-                setFeedback('Changes have been updated.')
+                setFeedback('Changes have been updated.');
+                dispatch(updateUser({ id: user.id, changes: notSameProperties }));
             })
             .catch(error => {
                 setFeedback(error.message);

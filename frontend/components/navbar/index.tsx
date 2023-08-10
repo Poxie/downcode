@@ -11,6 +11,8 @@ import { LoginModal } from "@/modals/login";
 import { SignUpModal } from "@/modals/sign-up";
 import { useAuth } from "@/contexts/auth";
 import { AnimatePresence } from "framer-motion";
+import { useAppSelector } from "@/redux/store";
+import { selectSelf } from "@/redux/slices/users";
 
 const TABS = [
     { text: 'Home', path: '/' },
@@ -36,9 +38,11 @@ const USER_GROUPS: {
 ]
 
 export const Navbar = () => {
-    const { user, token, loading } = useAuth();
+    const { token, loading } = useAuth();
     const { setModal } = useModal();
     const asPath = usePathname();
+
+    const user = useAppSelector(selectSelf);
 
     const [openUser, setOpenUser] = useState(false);
     const userButton = useRef<HTMLButtonElement>(null);

@@ -2,10 +2,11 @@
 
 import React, { useState, useCallback, useEffect } from 'react';
 import { User } from '@/types';
+import { useAppDispatch } from '@/redux/store';
+import { addUsers } from '@/redux/slices/users';
 
 type AuthContextType = {
     loading: boolean;
-    user: User | null;
     token: string | null;
     get: <T>(query: string) => Promise<T>;
     post: <T>(query: string, body?: Object) => Promise<T>;
@@ -23,8 +24,9 @@ export const useAuth = () => {
 export const AuthProvider: React.FC<{
     children: React.ReactNode;
 }> = ({ children }) => {
+    const dispatch = useAppDispatch();
+
     const [token, setToken] = useState<null | string>(null);
-    const [user, setUser] = useState<User | null>(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -36,7 +38,9 @@ export const AuthProvider: React.FC<{
         if(!token) return setLoading(false);
 
         get<User>(`/users/me`)
-            .then(setUser)
+            .then(user => {
+                dispatch(addUsers([user]));
+            })
             .finally(() => {
                 setLoading(false);
             })
@@ -88,7 +92,6 @@ export const AuthProvider: React.FC<{
     ), [token]);
 
     const value = {
-        user,
         get,
         post,
         patch,
