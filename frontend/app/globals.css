@@ -11,3 +11,7 @@
 input[type="file"]::-webkit-file-upload-button {
   cursor: pointer;
 }
+input:-webkit-autofill {
+  -webkit-box-shadow:0 0 0 50px #1A2441 inset;
+  -webkit-text-fill-color: #fff;
+}
