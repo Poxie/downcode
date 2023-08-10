@@ -9,11 +9,15 @@ import { MAXIMUM_PASSWORD_LENGTH, MAXIMUM_USERNAME_LENGTH, MINIMUM_PASSWORD_LENG
 const router = express.Router();
 
 // Function to get user
-export const getUser = async (userId: string, selfId?: string) => {
+export const getUser = async (userId: string | null, selfId?: string) => {
+    if(!userId) return;
+
     const user = await myDataSource.getRepository(User).findOne({
         select: ['id', 'displayName', 'username', 'isStaff', 'createdAt'],
         where: { id: userId }
     })
+    if(!user) return user;
+
     return {
         ...user,
         isSelf: user.id === selfId
@@ -101,22 +105,16 @@ router.get("/", async (req: Request, res: Response) => {
     res.json(users);
 })
 
-// Route to get logged in user
-router.get('/me', async (req: Request, res: Response) => {
-    const userId = await getUserIdFromHeaders(req.headers);
-    if(!userId) return res.status(401).send({ message: 'User is unauthorized.' });
-
-    const selfId = await getUserIdFromHeaders(req.headers);
-    const user = await getUser(userId, selfId);
-    if(!user) return res.status(404).send({ message: 'User not found.' });
-    
-    return res.json(user);
-})
-
 // Route to get a specific user
 router.get('/:userId', async (req: Request, res: Response) => {
+    let userId = req.params.userId;
+
     const selfId = await getUserIdFromHeaders(req.headers);
-    const user = await getUser(req.params.userId, selfId);
+    if(userId === 'me') userId = selfId;
+
+    const user = await getUser(userId, selfId);
+    if(!user) return res.status(404).send({ message: 'User not found.' });
+
     return res.json(user);
 })
 
