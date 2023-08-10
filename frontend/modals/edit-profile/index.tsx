@@ -63,7 +63,7 @@ export const EditProfile = () => {
 
     const avatarURL = useMemo(() => {
         let avatarURL = tempUser.avatar;
-        if(typeof tempUser.avatar === 'object') {
+        if(tempUser.avatar !== null && typeof tempUser.avatar === 'object') {
             avatarURL = URL.createObjectURL(tempUser.avatar);
         }
         return avatarURL;
@@ -95,13 +95,24 @@ export const EditProfile = () => {
                             ref={avatarInput}
                         />
                     </div>
-                    <Button 
-                        type={'secondary'}
-                        className="border-[1px] border-quaternary text-xs px-4 py-3"
-                        onClick={() => avatarInput.current?.click()}
-                    >
-                        Change avatar
-                    </Button>
+                    <div className="flex gap-1.5">
+                        <Button 
+                            type={'secondary'}
+                            className="border-[1px] border-quaternary text-xs px-4 py-3"
+                            onClick={() => avatarInput.current?.click()}
+                        >
+                            Change avatar
+                        </Button>
+                        {avatarURL && (
+                            <Button 
+                                type={'danger'}
+                                className="border-[1px] border-quaternary text-xs px-4 py-3"
+                                onClick={() => updateTempUser('avatar', null)}
+                            >
+                                Remove avatar
+                            </Button>
+                        )}
+                    </div>
                 </div>
                 <div className="flex-1 flex flex-col gap-2">
                     <Input 
