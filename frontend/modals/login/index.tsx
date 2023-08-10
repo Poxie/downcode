@@ -52,7 +52,7 @@ export const LoginModal = () => {
         <>
         <ModalHeader headerClassName="flex justify-center items-center gap-1.5">
             Sign into 
-            <LogoIcon className="w-[130px]" />
+            <LogoIcon className="w-[115px]" />
         </ModalHeader>
         <form 
             className="flex flex-col gap-2 px-6"
