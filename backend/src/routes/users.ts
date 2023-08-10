@@ -25,10 +25,10 @@ const getUserIdFromHeaders: ((headers: Request['headers']) => Promise<string | n
     const accessToken = headers.authorization.split(' ')[1];
 
     return new Promise((res, rej) => {
-        jwt.verify(accessToken, process.env.JWT_PRIVATE_KEY, async (error, decoded: { 
+        jwt.verify(accessToken, process.env.JWT_PRIVATE_KEY, async (error, decoded?: { 
             userId: string 
         }) => {
-            if(error) res(null);
+            if(error || !decoded) return res(null);
             res(decoded.userId);
         })
     })
