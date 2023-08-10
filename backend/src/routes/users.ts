@@ -27,7 +27,7 @@ export const getUser = async (userId: string | null, selfId?: string) => {
 
 // Function to get userId from auth headers
 const getUserIdFromHeaders: ((headers: Request['headers']) => Promise<string | null>) = (headers) => {
-    const accessToken = headers.authorization.split(' ')[1];
+    const accessToken = headers.authorization?.split(' ')[1];
 
     return new Promise((res, rej) => {
         jwt.verify(accessToken, process.env.JWT_PRIVATE_KEY, async (error, decoded?: { 
