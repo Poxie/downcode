@@ -23,8 +23,9 @@ const USER_GROUPS: {
     type?: 'danger'
 }[][] = [
     [
-        { text: 'My profile', path: '/profile' },
-        { text: 'My learning', path: '/learning' },
+        { text: 'My profile', path: '/u/me/profile' },
+        { text: 'My learning', path: '/u/me/learning' },
+        { text: 'My courses', path: '/u/me/courses' },
     ],
     [
         { text: 'Logout', type: 'danger', onClick: () => {
@@ -60,8 +61,8 @@ export const Navbar = () => {
     }
 
     return(
-        <nav className="w-full absolute">
-            <div className="w-main max-w-main m-auto h-[106px] py-4 sm:py-7 flex justify-between items-center">
+        <nav className={`w-full ${asPath === '/' ? 'absolute': 'relative'}`}>
+            <div className="w-main max-w-main m-auto h-[100px] py-4 sm:py-7 flex justify-between items-center">
                 <div className="flex items-center gap-6">
                     <Link 
                         href={'/'}

@@ -34,7 +34,7 @@ export const AuthProvider: React.FC<{
     useEffect(() => {
         if(!token) return setLoading(false);
 
-        get<User>(`/users/@me`)
+        get<User>(`/users/me`)
             .then(setUser)
             .finally(() => {
                 setLoading(false);

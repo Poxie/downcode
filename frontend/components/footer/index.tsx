@@ -2,7 +2,7 @@ import { LogoIcon } from "@/assets/icons/LogoIcon"
 
 export const Footer = () => {
     return(
-        <div className="flex justify-between w-main max-w-main mx-auto py-8">
+        <footer className="flex justify-between items-center w-main max-w-main mx-auto py-8 h-[100px]">
             <LogoIcon />
             <span>
                 designed & created by
@@ -16,6 +16,6 @@ export const Footer = () => {
                     Poxen
                 </a>
             </span>
-        </div>
+        </footer>
     )
 }

@@ -3,4 +3,6 @@ export type User = {
     username: string;
     displayName: string | null;
     isStaff: boolean;
+    isSelf: boolean;
+    createdAt: string;
 }

@@ -19,4 +19,7 @@ export class User {
 
     @Column({ default: false })
     isStaff: boolean
+
+    @Column({ type: 'bigint' })
+    createdAt: string;
 }
