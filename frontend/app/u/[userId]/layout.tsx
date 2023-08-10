@@ -11,6 +11,8 @@ import { EditProfile } from '@/modals/edit-profile';
 import { useModal } from '@/contexts/modal';
 import Image from 'next/image';
 import { getUserAvatar } from '@/utils/getImages';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { addUsers, selectUserById } from '@/redux/slices/users';
 
 const PROFILE_TABS = [
     { text: 'Profile', path: 'profile' },
@@ -21,16 +23,21 @@ export default function UserLayout({ children, params: { userId } }: {
     children: React.ReactNode;
     params: { userId: string };
 }) {
+    const dispatch = useAppDispatch();
     const asPath = usePathname();
     const { setModal } = useModal();
     const { get, loading } = useAuth();
 
-    const [user, setUser] = useState<User | null>(null);
+    const user = useAppSelector(state => selectUserById(state, userId));
 
     useEffect(() => {
-        if(loading) return;
-        get<User>(`/users/${userId}`).then(setUser);
-    }, [loading, userId, get]);
+        if(loading || user) return;
+
+        get<User>(`/users/${userId}`)
+            .then(user => {
+                dispatch(addUsers([user]));
+            });
+    }, [loading, userId, get, user]);
 
     const timeFormater = Intl.DateTimeFormat('en', { dateStyle: 'medium' });
     return(

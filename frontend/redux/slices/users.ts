@@ -33,3 +33,4 @@ export default usersSlice.reducer;
 const selectId = (_:RootState, id: string) => id;
 
 export const selectSelf = (state: RootState) => state.users.find(user => user.isSelf);
+export const selectUserById = (state: RootState, userId: string) => state.users.find(user => (userId === 'me' ? user.isSelf : user.id === userId));
