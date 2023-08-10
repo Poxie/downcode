@@ -20,11 +20,11 @@ export const Button: React.FC<{
     href?: string;
     className?: string;
     disabled?: boolean;
-}> = ({ children, onClick, href, className, disabled, type='primary' }) => {
+}> = ({ children, onClick, href, disabled, className='', type='primary' }) => {
     const background = typeToBackground(type);
     const backgroundHover = typeToHover(type);
 
-    className = (className ? className + ' ' : '') + `block py-[15px] px-[20px] rounded-lg text-sm transition-colors ${background} ${backgroundHover} focus:ring-1 focus:ring-offset-2`;
+    className = `block ${!className.includes('py') ? 'py-[15px]' : ''} ${!className.includes('px') ? 'px-[20px]' : ''} rounded-lg text-sm transition-colors ${background} ${backgroundHover} focus:ring-1 focus:ring-offset-2 ` + className;
     return(
         href ? (
             <Link 
