@@ -44,7 +44,7 @@ router.get('/users/:userId/courses', async (req: Request, res: Response) => {
 
     const courses = await myDataSource.getRepository(Course).find({
         where: { type, authorId: userId },
-        select: ['id', 'author', 'status', 'title', 'description', 'skillLevel', 'createdAt', 'publishedAt']
+        select: ['id', 'author', 'type', 'status', 'title', 'description', 'skillLevel', 'createdAt', 'publishedAt']
     });
 
     return res.json(courses);
