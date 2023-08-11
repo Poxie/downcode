@@ -37,12 +37,15 @@ export default function UserCourses({
 
             {children}
 
-            <button className="w-full flex gap-1.5 justify-center items-center text-secondary p-6 rounded-lg border-[1px] border-quaternary transition-colors hover:bg-tertiary">
+            <Link 
+                className="w-full flex gap-1.5 justify-center items-center text-secondary p-6 rounded-lg border-[1px] border-quaternary transition-colors hover:bg-tertiary"
+                href={'/u/me/courses/drafts/new'}
+            >
                 <AddIcon className="w-4" />
                 <span className="text-xs">
                     Create a new course
                 </span>
-            </button>
+            </Link>
         </div>
     )
 }
