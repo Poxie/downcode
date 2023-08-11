@@ -2,19 +2,20 @@ import { forwardRef } from 'react';
 
 export const Input = forwardRef<HTMLInputElement, {
     onChange: (value: string) => void;
-    value: string;
+    value: string | number;
     label: string;
     name: string;
     autoFocus?: boolean;
-    type?: 'text' | 'password';
+    type?: 'text' | 'password' | 'number';
     className?: string;
-}>(({ onChange, value, label, autoFocus, name, type='text', className='' }, ref) => {
+    containerClassName?: string;
+}>(({ onChange, value, label, autoFocus, name, type='text', containerClassName='', className='' }, ref) => {
     return(
-        <div className={"relative " + className}>
+        <div className={"relative " + containerClassName}>
             <input 
                 placeholder=""
                 autoComplete='off'
-                className="peer p-3 bg-tertiary border-[1px] border-quaternary outline-none rounded-md w-full text-sm"
+                className={"peer p-3 bg-tertiary border-[1px] border-quaternary outline-none rounded-md w-full text-sm " + className}
                 onChange={e => onChange(e.target.value)}
                 autoFocus={autoFocus}
                 value={value} 
