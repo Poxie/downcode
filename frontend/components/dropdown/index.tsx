@@ -35,7 +35,10 @@ export function Dropdown<T>({ label, items, active, onSelect, width=175, selecte
     }, [dropdown]);
 
     return(
-        <div className={`relative w-[${width}px]`}>
+        <div 
+            className={`relative`}
+            style={{ minWidth: `${width}px` }}
+        >
             {label && (
                 <span className="block text-xs text-secondary mb-2">
                     {label}

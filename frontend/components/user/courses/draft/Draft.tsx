@@ -1,20 +1,17 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { DraftSidebar } from './DraftSidebar';
 import { DraftOverview } from './DraftOverview';
-import { useSearchParams } from 'next/navigation';
+import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { DraftSection } from './DraftSection';
+import { useAppDispatch, useAppSelector } from '@/redux/store';
+import { addCourses, selectCourseById } from '@/redux/slices/courses';
+import { Course } from '@/types';
+import { useAuth } from '@/contexts/auth';
 
 export type SkillLevel = 'beginner' | 'intermediate' | 'advanced';
-type Course = {
-    title: string;
-    description: string;
-    sections: Section[];
-    skillLevel: SkillLevel;
-}
-type CourseWithoutSection = Omit<Course, 'sections'>;
 type Section = {
     title: string;
     description: string;
@@ -23,21 +20,6 @@ type Section = {
         identifier: 'minutes' | 'hours';
     };
     xp: number;
-}
-
-type Context = Course & {
-    courseXP: number;
-    courseDuration: number;
-    updateCourse: (property: keyof CourseWithoutSection, value: CourseWithoutSection[keyof CourseWithoutSection]) => void;
-    updateSection: (index: number, property: keyof Section, value: Section[keyof Section]) => void;
-    addSection: () => void;
-}
-const DraftContext = React.createContext<Context | null>(null);
-
-export const useDraft = () => {
-    const context = React.useContext(DraftContext);
-    if(!context) throw new Error('Draft context provider does not wrap components.');
-    return context;
 }
 
 const getEmptySection: () => Section = () => ({
@@ -50,57 +32,51 @@ const getEmptySection: () => Section = () => ({
     xp: 0,
 })
 
-export const Draft: React.FC<{
-    draftId: string;
-}> = ({ draftId }) => {
+const getEmptyCourse: () => Course = () => ({
+    title: '',
+    description: '',
+    sections: [ getEmptySection() ],
+    skillLevel: 'beginner',
+    createdAt: Date.now(),
+    id: '',
+    publishedAt: null,
+    status: 'idle',
+    type: 'draft',
+})
+
+export const Draft = () => {
+    const { get, post, loading } = useAuth();
+    const router = useRouter();
+
+    const draftId = useParams().draftId as string;
+    const draft = useAppSelector(state => selectCourseById(state, draftId));
     const sectionIndex = useSearchParams().get('s');
+    
+    const dispatch = useAppDispatch();
 
-    const [info, setInfo] = useState<Course>({
-        title: '',
-        description: '',
-        sections: [ getEmptySection() ],
-        skillLevel: 'beginner'
-    });
+    useEffect(() => {
+        if(loading || draftId !== 'new') return;
 
-    // Total course duration in seconds
-    const courseDuration = info.sections.map(section => section.duration).reduce((partialSum, a) => (
-        partialSum + (a.amount * (a.identifier === 'minutes' ? 60 : 60 * 60)
-    )), 0);
-    const courseXP = info.sections.map(section => section.xp).reduce((partialSum, a) => partialSum + a, 0);
-
-    const updateCourse: Context['updateCourse'] = (property, value) => {
-        setInfo(prev => ({
-            ...prev,
-            [property]: value
-        }))
-    }
-    const updateSection: Context['updateSection'] = (index, property, value) => {
-        setInfo(prev => ({
-            ...prev,
-            sections: prev.sections.map((section, key) => {
-                if(key !== index) return section;
-                return {
-                    ...section,
-                    [property]: value
-                }
+        post<Course>(`/users/me/courses`)
+            .then(course => {
+                dispatch(addCourses([course]));
+                router.replace(`/u/me/courses/drafts/${course.id}`);
             })
-        }))
-    }
-    const addSection = () => setInfo(prev => ({
-        ...prev,
-        sections: prev.sections.concat(getEmptySection())
-    }))
+    }, [post, loading, draftId]);
 
-    const value = {
-        ...info,
-        courseXP,
-        courseDuration,
-        updateCourse,
-        updateSection,
-        addSection,
-    }
+    useEffect(() => {
+        if(draftId === 'new' || loading || draft) return;
+
+        get<Course[]>('/users/me/courses?type=draft')
+            .then(courses => {
+                dispatch(addCourses(courses));
+            })
+    }, [draftId, get, loading, draft]);
+
+    if(draftId === 'new') return null;
+
     return(
-        <DraftContext.Provider value={value}>
+        <>
             <DraftSidebar />
             
             <AnimatePresence mode='wait'>
@@ -110,10 +86,19 @@ export const Draft: React.FC<{
                         key={`section-${sectionIndex}`}
                     />
                 )}
-                {!sectionIndex && (
-                    <DraftOverview key={'overview'} />
+                {!sectionIndex && (               
+                    <motion.div 
+                        className="flex-1 grid gap-4"
+                        exit={{ scale: .98, opacity: 0 }}
+                        initial={{ scale: .98, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ duration: .15 }}
+                        key={'overview'}
+                    >
+                        <DraftOverview />
+                    </motion.div>
                 )}
             </AnimatePresence>
-        </DraftContext.Provider>
+        </>
     )
 }

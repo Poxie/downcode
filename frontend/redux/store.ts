@@ -2,9 +2,11 @@ import { $CombinedState, AnyAction, combineReducers, configureStore as _configur
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import { createWrapper, HYDRATE } from 'next-redux-wrapper';
 import usersReducer, { UsersState } from './slices/users';
+import coursesReducer, { CoursesState } from './slices/courses';
 
 const combinedReducers = combineReducers({
-    users: usersReducer
+    users: usersReducer,
+    courses: coursesReducer,
 });
 
 const reducer = (state: ReturnType<typeof combinedReducers>, action: AnyAction) => {
@@ -34,6 +36,7 @@ export type RootState = {
     readonly [$CombinedState]?: undefined;
 } & {
     users: UsersState;
+    courses: CoursesState;
 }
 
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}

@@ -1,7 +1,6 @@
 import { Dropdown } from '@/components/dropdown';
 import { Input } from '@/components/input';
 import { motion } from 'framer-motion';
-import { useDraft } from './Draft';
 import { CourseChip } from '../CourseChip';
 import { EditableText } from './EditableText';
 
@@ -10,9 +9,6 @@ const TIME_ITEMS = (['minutes', 'hours'] as const).map(t => ({ id: t, text: t })
 export const DraftSection: React.FC<{
     sectionIndex: number;
 }> = ({ sectionIndex }) => {
-    const { updateSection, sections } = useDraft();
-    const { title, description, xp, duration: { amount: currentAmount, identifier: currentIdentifier } } = sections[sectionIndex];
-
     return(
         <motion.div 
             className="flex-1 grid gap-4"
@@ -21,7 +17,7 @@ export const DraftSection: React.FC<{
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: .15 }}
         >
-            <div className="p-4 flex gap-3 border-[1px] bg-secondary border-tertiary rounded-lg">
+            {/* <div className="p-4 flex gap-3 border-[1px] bg-secondary border-tertiary rounded-lg">
                 <div className="flex">
                     <Input 
                         label={'Lecture duration'}
@@ -86,7 +82,7 @@ export const DraftSection: React.FC<{
                     text={description}
                     placeholder={'Lecture description not set'}
                 />
-            </div>
+            </div> */}
         </motion.div>
     )
 }

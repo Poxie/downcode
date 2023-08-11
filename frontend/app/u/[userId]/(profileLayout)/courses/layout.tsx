@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { AddIcon } from "@/assets/icons/AddIcon"
 import { usePathname } from "next/navigation";
+import { useEffect } from 'react';
+import { useAuth } from "@/contexts/auth";
 
 const COURSE_TABS = [
     { text: 'Published courses', path: '' },
@@ -14,6 +16,13 @@ export default function UserCourses({
     children: React.ReactNode;
 }) {
     const pathname = usePathname();
+    const { get, loading } = useAuth();
+
+    useEffect(() => {
+        if(loading) return;
+
+        get(`/users/6695832007/courses?type=draft`).then(console.log);
+    }, [get, loading]);
 
     return(
         <div className="p-4 bg-secondary border-[1px] border-tertiary rounded-lg">
