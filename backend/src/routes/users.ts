@@ -6,6 +6,8 @@ import { Request, Response } from 'express';
 import { myDataSource } from '../app-data-source';
 import { User } from '../entity/user.entity';
 import { ALLOWED_FILE_EXTENSIONS, ALLOWED_USER_UPDATE_PROPS, MAXIMUM_PASSWORD_LENGTH, MAXIMUM_USERNAME_LENGTH, MINIMUM_PASSWORD_LENGTH, MINIMUM_USERNAME_LENGTH, SALT_ROUNDS } from '../constants';
+import { getUserIdFromHeaders } from '../utils/auth';
+import { createId } from '../utils';
 
 const router = express.Router();
 
@@ -25,37 +27,6 @@ export const getUser = async (userId: string | null, selfId?: string) => {
     };
 }
 
-// Function to get userId from auth headers
-const getUserIdFromHeaders: ((headers: Request['headers']) => Promise<string | null>) = (headers) => {
-    const accessToken = headers.authorization?.split(' ')[1];
-
-    return new Promise((res, rej) => {
-        jwt.verify(accessToken, process.env.JWT_PRIVATE_KEY, async (error, decoded?: { 
-            userId: string 
-        }) => {
-            if(error || !decoded) return res(null);
-            res(decoded.userId);
-        })
-    })
-}
-
-// Function to create user id
-const USER_ID_LENGTH = 10;
-const createUserId = async () => {
-    const opts = '0123456789';
-
-    // Creating random id
-    let id = ''
-    for(let i = 0; i < USER_ID_LENGTH; i++) {
-        id += opts[Math.ceil(Math.random() * opts.length) - 1]
-    }
-
-    // Checking if id is available
-    if(await getUser(id)) {
-        return await createUserId();
-    }
-    return id;
-}
 
 // Route to create new user
 router.post("/", async (req: Request, res: Response) => {
@@ -83,7 +54,7 @@ router.post("/", async (req: Request, res: Response) => {
 
     // Creating new user
     const newUser = myDataSource.getRepository(User).create({
-        id: await createUserId(),
+        id: await createId('user'),
         username,
         password: hashedPassword,
         displayName,
