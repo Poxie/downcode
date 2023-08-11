@@ -20,6 +20,7 @@ module.exports = {
         secondary: '#141C34',
         tertiary: '#1A2441',
         quaternary: '#1F2B4F',
+        completed: '#00903A',
       },
       textColor: {
         'c-primary': '#1081B5',
@@ -32,6 +33,10 @@ module.exports = {
       borderColor: {
         'c-primary': '#1081B5',
         'c-secondary': '#178CC0',
+        't-primary': '#fff',
+        't-secondary': '#94A3B8',
+        't-primary-accent': '94A3B8',
+        't-secondary-accent': '#626D7C',
         primary: '#0F172A',
         secondary: '#141C34',
         tertiary: '#1A2441',

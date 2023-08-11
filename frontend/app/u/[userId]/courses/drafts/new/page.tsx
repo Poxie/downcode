@@ -1,7 +1,3 @@
-export default function NewDraft() {
-    return(
-        <div>
-            new draft
-        </div>
-    )
-}
+import { DraftPage } from "@/components/user/courses/draft";
+
+export default DraftPage;
