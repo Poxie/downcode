@@ -87,7 +87,7 @@ export default function UserLayout({ children, params: { userId } }: {
             <ul className="flex bg-secondary border-tertiary border-[1px] rounded-lg p-2 my-3">
                 {PROFILE_TABS.map(tab => {
                     const path = `/u/${userId}/${tab.path}`;
-                    const active = path === asPath;
+                    const active = asPath.startsWith(path);
 
                     return(
                         <li key={tab.path}>
