@@ -95,7 +95,7 @@ export const DraftOverview: React.FC<{
                         disabled={preview}
                     />
                     <EditableText 
-                        iconClassName="w-[13px]"
+                        iconClassName="min-w-[13px] w-[13px]"
                         className="text-sm text-secondary"
                         onChange={description => updateProperty({ description })}
                         placeholder={'Course description not set'}

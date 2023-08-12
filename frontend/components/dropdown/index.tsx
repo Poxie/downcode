@@ -9,12 +9,13 @@ export type DropdownItem<T> = {
     text: string;
 }
 
-export function Dropdown<T>({ label, items, active, onSelect, width=175, selectedClassName='' }: {
+export function Dropdown<T>({ label, items, active, onSelect, width=175, containerClassName='', selectedClassName='' }: {
     label?: string;
     active: T;
     items: DropdownItem<T>[];
     onSelect: (id: T) => void;
     selectedClassName?: string;
+    containerClassName?: string;
     width?: number;
 }) {
     const [open, setOpen] = useState(false);
@@ -36,7 +37,7 @@ export function Dropdown<T>({ label, items, active, onSelect, width=175, selecte
 
     return(
         <div 
-            className={`relative`}
+            className={`relative ${containerClassName}`}
             style={{ minWidth: `${width}px` }}
         >
             {label && (

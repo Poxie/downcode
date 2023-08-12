@@ -6,6 +6,12 @@
   body {
     @apply bg-primary text-primary;
   }
+  .scrollbar-x::-webkit-scrollbar {
+    height: 15px;
+  }
+  .scrollbar-x::-webkit-scrollbar-thumb {
+    @apply border-[5px] border-solid border-secondary bg-quaternary rounded-lg;
+  }
 }
 
 input[type="file"]::-webkit-file-upload-button {

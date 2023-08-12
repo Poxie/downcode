@@ -45,9 +45,9 @@ export default function UserLayout({ children, params: { userId } }: {
             // 100dvh for full height - 200px (100px for navbar height, 100px for footer height)
             className="w-main max-w-main mx-auto min-h-[calc(100dvh-200px)]"
         >
-            <div className="flex items-start justify-between gap-4 p-4 bg-secondary border-[1px] border-tertiary rounded-lg">
-                <div className='flex gap-4'>
-                    <div className="flex justify-center items-center w-[100px] h-[100px] rounded-md bg-tertiary border-[1px] border-quaternary overflow-hidden">
+            <div className="sm:flex items-start justify-between gap-4 p-4 bg-secondary border-[1px] border-tertiary rounded-lg">
+                <div className='flex gap-4 mb-4 sm:mb-0'>
+                    <div className="flex justify-center items-center w-[75px] h-[75px] sm:w-[100px] sm:h-[100px] rounded-md bg-tertiary border-[1px] border-quaternary overflow-hidden">
                         {user?.avatar ? (
                             <Image 
                                 width={100}
@@ -78,6 +78,7 @@ export default function UserLayout({ children, params: { userId } }: {
                         onClick={() => setModal(<EditProfile />)}
                         isSmall
                         withBorder
+                        className="w-full sm:w-[unset]"
                     >
                         Edit profile
                     </Button>

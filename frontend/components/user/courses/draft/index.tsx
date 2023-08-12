@@ -64,7 +64,7 @@ export const Draft = () => {
                         </button>
                     </div>
                 )}
-                <div className="flex gap-4 items-start">
+                <div className="flex flex-col sm:flex-row gap-4 items-start">
                     <DraftSidebar />
                     
                     <AnimatePresence mode='wait'>

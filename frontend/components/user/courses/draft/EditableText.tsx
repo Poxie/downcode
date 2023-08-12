@@ -40,12 +40,12 @@ export const EditableText: React.FC<{
                     ref={input}
                 />
                 <button 
-                    className={`flex gap-3 items-center text-left ${editing ? 'hidden' : 'block'} ${className}`}
+                    className={`flex gap-3 text-left ${editing ? 'hidden' : 'block'} ${className}`}
                     onClick={() => setEditing(true)}
                     onFocus={() => setEditing(true)}
                 >
                     {text || placeholder}
-                    <EditIcon className={`w-4 text-secondary ${iconClassName}`} />
+                    <EditIcon className={`min-w-4 w-4 text-secondary ${iconClassName}`} />
                 </button>
             </>
         ) : (

@@ -60,20 +60,20 @@ export const DraftSection: React.FC<{
     const { title, description, duration, durationIdentifier, xp } = section;
     return(
         <motion.div 
-            className="flex-1 grid gap-4"
+            className="w-full sm:w-[unset] flex-1 grid gap-4"
             exit={{ scale: .98, opacity: 0 }}
             initial={{ scale: .98, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: .15 }}
         >
             {!preview && (
-                <div className="p-4 flex gap-3 border-[1px] bg-secondary border-tertiary rounded-lg">
-                    <div className="flex">
+                <div className="p-4 flex gap-3 flex-col lg:flex-row border-[1px] bg-secondary border-tertiary rounded-lg">
+                    <div className="flex flex-1 sm:flex-none">
                         <Input 
                             label={'Lecture duration'}
                             name={'lecture-duration'}
                             className='p-[10px] h-[38px] rounded-r-none'
-                            containerClassName='w-[140px]'
+                            containerClassName='flex-1 lg:flex-none lg:w-[140px]'
                             onChange={duration => updateProperty({ duration: Number(duration) })}
                             value={!duration ? '' : duration}
                             type={'number'}
@@ -83,11 +83,13 @@ export const DraftSection: React.FC<{
                             active={durationIdentifier}
                             onSelect={durationIdentifier => updateProperty({ durationIdentifier })}
                             selectedClassName={'rounded-l-none'}
+                            containerClassName='flex-1 lg:flex-none'
                             width={140}
                         />
                     </div>
                     <Input 
-                        className='p-[10px] h-[38px]'
+                        containerClassName='flex-1 lg:flex-none'
+                        className='lg:flex-none p-[10px] h-[38px]'
                         label={'Lecture XP'}
                         name={'lecture-xp'}
                         onChange={xp => updateProperty({ xp: Number(xp) })}

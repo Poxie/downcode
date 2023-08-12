@@ -16,11 +16,11 @@ export const Course: React.FC<{
     return(
         <div className="border-[1px] border-quaternary bg-tertiary rounded-lg mb-2">
             <div className="p-4">
-                <div className="flex items-center gap-4">
+                <div className="flex sm:items-center flex-col-reverse sm:flex-row gap-4">
                     <span className="text-lg font-semibold">
                         {title || 'Course title not set'}
                     </span>
-                    <div className="flex gap-1">
+                    <div className="flex flex-wrap gap-1">
                         <CourseChip>
                             {skillLevel.slice(0,1).toUpperCase() + skillLevel.slice(1)}
                         </CourseChip>
