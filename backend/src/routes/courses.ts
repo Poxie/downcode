@@ -12,7 +12,7 @@ const router = express.Router();
 export const getCourse = async (id: string) => {
     const course = await myDataSource.getRepository(Course).findOne({
         where: { id },
-        select: ['id', 'author', 'sections', 'title', 'description', 'skillLevel', 'type', 'status', 'publishedAt', 'createdAt'],
+        select: ['id', 'author', 'authorId', 'sections', 'title', 'description', 'skillLevel', 'type', 'status', 'publishedAt', 'createdAt'],
         relations: ['author', 'sections'],
     })
     return course;
