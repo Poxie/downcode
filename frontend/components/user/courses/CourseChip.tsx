@@ -12,7 +12,7 @@ export const CourseChip: React.FC<{
     type?: ChipType;
 }> = ({ type='neutral', className='', children }) => {
     return(
-        <div className={`px-[7px] py-[5px] rounded-md text-[10px] font-semibold ${getBackgroundFromType(type)} ` + className}>
+        <div className={`px-[7px] py-[5px] rounded-md text-[10px] font-medium ${getBackgroundFromType(type)} ` + className}>
             {children}
         </div>
     )
