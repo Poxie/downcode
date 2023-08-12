@@ -29,7 +29,16 @@ export const DraftOverview = () => {
     const courseXP = useAppSelector(state => selectCourseXP(state, draftId));
 
     const updateProperty = async (changes: Partial<Course>) => {
+        if(!course) return;
         dispatch(updateCourse({ id: draftId, changes }));
+
+        let hasChanges = false;
+        for(const [property, value] of Object.entries(changes)) {
+            if(course[property as keyof typeof course] !== value) {
+                hasChanges = true;
+            }
+        }
+        if(!hasChanges) return;
 
         patch<Course>(`/courses/${draftId}`, changes)
             .catch(() => {
