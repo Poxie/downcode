@@ -11,9 +11,20 @@ export type Course = {
     id: string;
     title: string;
     description: string;
+    author: User;
+    sections: Section[];
     skillLevel: 'beginner' | 'intermediate' | 'advanced';
     type: 'draft' | 'course';
     status: 'idle' | 'pending' | 'published';
-    createdAt: number;
-    publishedAt: number | null;
+    createdAt: string;
+    publishedAt: string | null;
+}
+export type Section = {
+    id: string;
+    duration: number;
+    durationIdentifier: 'minutes' | 'hours';
+    xp: number;
+    title: string;
+    description: string;
+    createdAt: string;
 }

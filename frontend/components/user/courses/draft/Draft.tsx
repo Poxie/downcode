@@ -11,46 +11,13 @@ import { addCourses, selectCourseById } from '@/redux/slices/courses';
 import { Course } from '@/types';
 import { useAuth } from '@/contexts/auth';
 
-export type SkillLevel = 'beginner' | 'intermediate' | 'advanced';
-type Section = {
-    title: string;
-    description: string;
-    duration: {
-        amount: number;
-        identifier: 'minutes' | 'hours';
-    };
-    xp: number;
-}
-
-const getEmptySection: () => Section = () => ({
-    title: '',
-    description: '',
-    duration: {
-        amount: 0,
-        identifier: 'minutes'
-    },
-    xp: 0,
-})
-
-const getEmptyCourse: () => Course = () => ({
-    title: '',
-    description: '',
-    sections: [ getEmptySection() ],
-    skillLevel: 'beginner',
-    createdAt: Date.now(),
-    id: '',
-    publishedAt: null,
-    status: 'idle',
-    type: 'draft',
-})
-
 export const Draft = () => {
     const { get, post, loading } = useAuth();
     const router = useRouter();
 
     const draftId = useParams().draftId as string;
     const draft = useAppSelector(state => selectCourseById(state, draftId));
-    const sectionIndex = useSearchParams().get('s');
+    const sectionId = useSearchParams().get('s');
     
     const dispatch = useAppDispatch();
 
@@ -80,13 +47,14 @@ export const Draft = () => {
             <DraftSidebar />
             
             <AnimatePresence mode='wait'>
-                {sectionIndex && (
+                {sectionId && (
                     <DraftSection 
-                        sectionIndex={Number(sectionIndex)}
-                        key={`section-${sectionIndex}`}
+                        draftId={draftId}
+                        sectionId={sectionId}
+                        key={`section-${sectionId}`}
                     />
                 )}
-                {!sectionIndex && (               
+                {!sectionId && (               
                     <motion.div 
                         className="flex-1 grid gap-4"
                         exit={{ scale: .98, opacity: 0 }}

@@ -1,6 +1,6 @@
 import { PayloadAction, createSelector, createSlice } from "@reduxjs/toolkit"
 import { RootState } from "../store";
-import { Course, User } from "@/types";
+import { Course, Section, User } from "@/types";
 
 export type CoursesState = Course[];
 
@@ -21,32 +21,32 @@ const coursesSlice = createSlice({
             for(const [property, value] of Object.entries(action.payload.changes)) {
                 (course as Record<string, Course[keyof Course]>)[property] = value;
             }
+        },
+        updateSection: (state, action: PayloadAction<{ courseId: string, sectionId: string, changes: Partial<Section> }>) => {
+            const course = state.find(course => course.id === action.payload.courseId);
+            const section = course?.sections?.find(section => section.id === action.payload.sectionId);
+            if(!section) return;
+
+            for(const [property, value] of Object.entries(action.payload.changes)) {
+                (section as Record<string, Section[keyof Section]>)[property] = value;
+            }
         }
     }
 })
 
 // Actions & reducer
-export const { addCourses, updateCourse } = coursesSlice.actions;
+export const { addCourses, updateCourse, updateSection } = coursesSlice.actions;
 export default coursesSlice.reducer;
 
 // Selectors
 const selectId = (_:RootState, id: string) => id;
+const _selectId = (_:RootState, __: string, id: string) => id;
 
 export const selectCourses = (state: RootState) => state.courses;
 export const selectDrafts = (state: RootState) => state.courses.filter(course => course.type === 'draft');
 export const selectCourseById = createSelector(
     [selectCourses, selectId],
-    (courses, courseId) => {
-        const course = courses.find(course => course.id === courseId);
-        if(!course) return;
-
-        return {
-            id: course.id,
-            title: course.title,
-            description: course.description,
-            skillLevel: course.skillLevel,
-        }
-    }
+    (courses, courseId) => courses.find(course => course.id === courseId)
 )
 export const selectCourseDuration = createSelector(
     [selectCourseById],
@@ -55,4 +55,16 @@ export const selectCourseDuration = createSelector(
 export const selectCourseXP = createSelector(
     [selectCourseById],
     course => 250
+)
+
+export const selectCourseSectionIds = createSelector(
+    [selectCourseById],
+    course => course?.sections?.map(section => section.id)
+)
+export const selectSectionById = createSelector(
+    [selectCourseById, _selectId],
+    (course, sectionId) => {
+        const section = course?.sections?.find(section => section.id === sectionId);
+        return section;
+    }
 )

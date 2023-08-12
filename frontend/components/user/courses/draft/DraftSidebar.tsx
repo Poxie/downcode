@@ -1,11 +1,16 @@
 import Link from "next/link"
 import { motion } from 'framer-motion';
 import { AddIcon } from "@/assets/icons/AddIcon"
-import { useSearchParams } from "next/navigation"
+import { useParams, useSearchParams } from "next/navigation"
+import { useAppSelector } from "@/redux/store";
+import { selectCourseSectionIds } from "@/redux/slices/courses";
+import { DraftSidebarSection } from "./DraftSidebarSection";
 
 export const DraftSidebar = () => {
-    const draftId = useSearchParams().get('draftId');
+    const draftId = useParams().draftId as string;
     const activeSection = useSearchParams().get('s');
+
+    const sectionIds = useAppSelector(state => selectCourseSectionIds(state, draftId));
 
     const defaultClassName = "px-3 text-xs transition-colors";
     const activeClassName = "text-c-primary font-semibold relative before:w-[7px] before:h-[7px] before:bg-c-primary before:rounded-full before:absolute before:-left-[4px] before:top-2/4 before:-translate-y-2/4"
@@ -28,16 +33,14 @@ export const DraftSidebar = () => {
                         Overview
                     </Link>
                 </li>
-                {/* {sections.map((section, key) => (
-                    <li className="flex" key={key}>
-                        <Link 
-                            href={`/u/me/courses/drafts/${draftId}?s=${key}`}
-                            className={`${defaultClassName} ${Number(activeSection || '-1') === key ? activeClassName : inactiveClassName}` + (!section.title ? ' italic' : '')}
-                        >
-                            {section.title || 'Lecture title not set'}
-                        </Link>
-                    </li>
-                ))} */}
+                {sectionIds?.map(sectionId => (
+                    <DraftSidebarSection 
+                        className={`${defaultClassName} ${activeSection === sectionId ? activeClassName : inactiveClassName}`}
+                        draftId={draftId}
+                        sectionId={sectionId}
+                        key={sectionId}
+                    />
+                ))}
             </ul>
             {/* <button 
                 className="flex gap-3 items-center mt-4 w-full text-secondary hover:text-primary"
