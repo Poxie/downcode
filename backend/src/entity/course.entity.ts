@@ -1,12 +1,9 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm"
+import { Entity, Column, OneToOne, JoinColumn, ManyToMany, JoinTable, PrimaryColumn } from "typeorm"
 import { User } from "./user.entity"
 
 @Entity()
 export class Course {
-    @PrimaryGeneratedColumn()
-    ormId: number
-
-    @Column()
+    @PrimaryColumn()
     id: string
 
     @Column()
@@ -27,8 +24,8 @@ export class Course {
     @Column({ default: 'idle' })
     status: 'idle' | 'pending' | 'published'
     
-    @OneToOne(type => User)
-    @JoinColumn()
+    @OneToOne(() => User)
+    @JoinColumn({ foreignKeyConstraintName: 'authorId' })
     author: User
 
     @Column({ type: 'bigint' })

@@ -9,4 +9,5 @@ export const MAXIMUM_PASSWORD_LENGTH = 32;
 
 export const ALLOWED_USER_UPDATE_PROPS = ['username',  'displayName', 'avatar'];
 export const ALLOWED_FILE_EXTENSIONS = ['image/png', 'image/jpg', 'image/jpeg'];
+export const ALLOWED_COURSE_UPDATE_PROPS = ['title',  'description', 'skillLevel'];
 export const ALLOWED_COURSE_TYPES = ['course', 'draft'];
