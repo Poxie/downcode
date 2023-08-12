@@ -97,13 +97,10 @@ export const DraftSection: React.FC<{
                 </div>
             )}
             <div className="p-4 border-[1px] bg-secondary border-tertiary rounded-lg">
-                <div className="flex items-center pb-4">
+                <div className="flex gap-1.5 items-center pb-4">
                     <CourseChip className={!duration ? 'italic' : ''}>
                         {duration ? `${duration} ${durationIdentifier}` : 'Lecture duration not set'}
                     </CourseChip>
-                    <span className="px-1">
-                        •
-                    </span>
                     <CourseChip 
                         type={'xp'}
                         className={!xp ? 'italic': ''}

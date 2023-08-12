@@ -70,7 +70,7 @@ export const DraftOverview: React.FC<{
             )}
             
             <div className="grid gap-4 p-4 bg-secondary border-[1px] border-tertiary rounded-lg">
-                <div className="flex gap-1 items-center">
+                <div className="flex gap-1.5 items-center">
                     <CourseChip>
                         {SKILL_LEVELS.find(level => level.id === course?.skillLevel)?.text}
                     </CourseChip>
@@ -79,9 +79,6 @@ export const DraftOverview: React.FC<{
                     >
                         {courseDuration || 'Lecture durations not specified'}
                     </CourseChip>
-                    <span className="text-xs mx-1">
-                        •
-                    </span>
                     <CourseChip 
                         type={'xp'}
                         className={!courseXP ? 'italic' : ''}
