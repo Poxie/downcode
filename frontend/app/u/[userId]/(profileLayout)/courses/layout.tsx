@@ -21,7 +21,7 @@ export default function UserCourses({
     useEffect(() => {
         if(loading) return;
 
-        get(`/users/6695832007/courses?type=draft`).then(console.log);
+        get(`/users/me/courses?type=draft`).then(console.log);
     }, [get, loading]);
 
     return(
