@@ -1,4 +1,4 @@
-import { selectCourseById } from "@/redux/slices/courses";
+import { selectCourseInfo } from "@/redux/slices/courses";
 import { useAppSelector } from "@/redux/store";
 import { CourseChip } from "./CourseChip";
 import Link from "next/link";
@@ -6,7 +6,7 @@ import Link from "next/link";
 export const Course: React.FC<{
     draftId: string;
 }> = ({ draftId }) => {
-    const course = useAppSelector(state => selectCourseById(state, draftId));
+    const course = useAppSelector(state => selectCourseInfo(state, draftId));
 
     return(
         <div className="border-[1px] border-quaternary bg-tertiary rounded-lg mb-2">

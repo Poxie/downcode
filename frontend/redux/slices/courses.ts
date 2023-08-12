@@ -58,6 +58,19 @@ export const selectCourseById = createSelector(
     [selectCourses, selectId],
     (courses, courseId) => courses.find(course => course.id === courseId)
 )
+export const selectCourseInfo = createSelector(
+    [selectCourseById],
+    course => (course ? {
+        id: course.id,
+        title: course.title,
+        description: course.description,
+        status: course.status,
+        type: course.type,
+        skillLevel: course.skillLevel,
+        createdAt: course.createdAt,
+        publishedAt: course.publishedAt,
+    } : undefined)
+)
 export const selectCourseDuration = createSelector(
     [selectCourseById],
     course => 3600

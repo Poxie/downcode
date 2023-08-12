@@ -11,7 +11,7 @@ import { EditableText } from './EditableText';
 import { useParams } from 'next/navigation';
 import { Course } from '@/types';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
-import { selectCourseDuration, selectCourseById, updateCourse, selectCourseXP } from '@/redux/slices/courses';
+import { selectCourseDuration, updateCourse, selectCourseXP, selectCourseInfo } from '@/redux/slices/courses';
 import { useAuth } from '@/contexts/auth';
 import { DraftSections } from './DraftSections';
 
@@ -25,7 +25,7 @@ export const DraftOverview = () => {
     const draftId = useParams().draftId as string;
 
     const dispatch = useAppDispatch();
-    const course = useAppSelector(state => selectCourseById(state, draftId));
+    const course = useAppSelector(state => selectCourseInfo(state, draftId));
     const courseDuration = useAppSelector(state => selectCourseDuration(state, draftId));
     const courseXP = useAppSelector(state => selectCourseXP(state, draftId));
 
