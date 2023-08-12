@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { DraftSidebar } from './DraftSidebar';
 import { DraftOverview } from './DraftOverview';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { DraftSection } from './DraftSection';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { addCourses, selectCourseById } from '@/redux/slices/courses';
@@ -54,17 +54,11 @@ export const Draft = () => {
                         key={`section-${sectionId}`}
                     />
                 )}
-                {!sectionId && (               
-                    <motion.div 
-                        className="flex-1 grid gap-4"
-                        exit={{ scale: .98, opacity: 0 }}
-                        initial={{ scale: .98, opacity: 0 }}
-                        animate={{ scale: 1, opacity: 1 }}
-                        transition={{ duration: .15 }}
+                {!sectionId && (            
+                    <DraftOverview 
+                        draftId={draftId}
                         key={'overview'}
-                    >
-                        <DraftOverview />
-                    </motion.div>
+                    />
                 )}
             </AnimatePresence>
         </>

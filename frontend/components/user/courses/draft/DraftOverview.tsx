@@ -5,10 +5,7 @@ import { motion } from 'framer-motion';
 import { Dropdown } from "@/components/dropdown";
 import { CourseChip } from "../CourseChip";
 import { Button } from "@/components/button";
-import { AddIcon } from "@/assets/icons/AddIcon";
-import { EditIcon } from '@/assets/icons/EditIcon';
 import { EditableText } from './EditableText';
-import { useParams } from 'next/navigation';
 import { Course } from '@/types';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { selectCourseDuration, updateCourse, selectCourseXP, selectCourseInfo } from '@/redux/slices/courses';
@@ -20,9 +17,10 @@ const SKILL_LEVELS: { id: Course['skillLevel'], text: string }[] = [
     { id: 'intermediate', text: 'Intermediate' },
     { id: 'advanced', text: 'Advanced' },
 ]
-export const DraftOverview = () => {
+export const DraftOverview: React.FC<{
+    draftId: string;
+}> = ({ draftId }) => {
     const { patch } = useAuth();
-    const draftId = useParams().draftId as string;
 
     const dispatch = useAppDispatch();
     const course = useAppSelector(state => selectCourseInfo(state, draftId));
@@ -53,7 +51,13 @@ export const DraftOverview = () => {
     const durationInHours = ((courseDuration / 60) / 60).toFixed(1).replace('.0', '');
     const durationString = Number(durationInHours) < 1 ? `${courseDuration / 60} minutes` : `${durationInHours} hours`;
     return(
-        <>
+        <motion.div
+            className="flex-1 grid gap-4"
+            exit={{ scale: .98, opacity: 0 }}
+            initial={{ scale: .98, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: .15 }}
+        >
             <div className="flex p-4 bg-secondary border-[1px] border-tertiary rounded-lg">
                 <Dropdown<Course['skillLevel']> 
                     active={course?.skillLevel || 'beginner'}
@@ -109,6 +113,6 @@ export const DraftOverview = () => {
             </div>
             
             <DraftSections draftId={draftId} />
-        </>
+        </motion.div>
     )
 }
