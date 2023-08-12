@@ -6,6 +6,10 @@ import { Course } from '../entity/course.entity';
 import { ALLOWED_COURSE_TYPES, ALLOWED_COURSE_UPDATE_PROPS } from '../constants';
 import { createId } from '../utils';
 import { Section } from '../entity/section.entity';
+import { APIUnauthorizedError } from '../errors/apiUnauthorizedError';
+import { APIForbiddenError } from '../errors/apiForbiddenError';
+import { APIBadRequestError } from '../errors/apiBadRequestError';
+import { APINotFoundError } from '../errors/apiNotFoundError';
 
 const router = express.Router();
 
@@ -18,11 +22,12 @@ export const getCourse = async (id: string) => {
     return course;
 }
 
-router.post('/users/:userId/courses', async (req: Request, res: Response) => {
+router.post('/users/:userId/courses', async (req, res, next) => {
     const selfId = await getUserIdFromHeaders(req.headers);
     const userId = req.params.userId === 'me' ? selfId : req.params.userId;
 
-    if(selfId !== userId) return res.status(401).send({ message: 'Unauthorized.' });
+    if(!selfId) return next(new APIUnauthorizedError('Missing or invalid access token.'));
+    if(userId !== selfId) return next(new APIForbiddenError('Missing access.'));
 
     const courseData = myDataSource.getRepository(Course).create({
         id: await createId('course'),
@@ -43,15 +48,16 @@ router.post('/users/:userId/courses', async (req: Request, res: Response) => {
     return res.json(course);
 })
 
-router.get('/users/:userId/courses', async (req: Request, res: Response) => {
+router.get('/users/:userId/courses', async (req, res, next) => {
     // Important not to remove the if statement below, since 'as Course["type"]' is being used here
     const type = (req.query.type || 'course') as Course['type'];
-    if(!ALLOWED_COURSE_TYPES.includes(type)) return res.status(400).send({ message: 'Invalid course type provided.' });
+    if(!ALLOWED_COURSE_TYPES.includes(type)) return next(new APIBadRequestError('Invalid course type provided.'));
 
     const selfId = await getUserIdFromHeaders(req.headers);
     const userId = req.params.userId === 'me' ? selfId : req.params.userId;
 
-    if(selfId !== userId) return res.status(401).send({ message: 'Unauthorized.' });
+    if(!selfId) return next(new APIUnauthorizedError('Missing or invalid access token.'));
+    if(userId !== selfId) return next(new APIForbiddenError('Missing access.'));
 
     const courses = await myDataSource.getRepository(Course).find({
         where: { type, authorId: userId },
@@ -62,17 +68,18 @@ router.get('/users/:userId/courses', async (req: Request, res: Response) => {
     return res.json(courses);
 })
 
-router.patch('/courses/:courseId', async (req: Request, res: Response) => {
+router.patch('/courses/:courseId', async (req, res, next) => {
     const course = await getCourse(req.params.courseId);
-    if(!course) return res.status(404).send({ message: 'Course not found.' });
+    if(!course) return next(new APINotFoundError('Course not found.'));
     
     const selfId = await getUserIdFromHeaders(req.headers);
 
-    if(selfId !== course.author.id) return res.status(401).send({ message: 'Unauthorized.' });
+    if(!selfId) return next(new APIUnauthorizedError('Missing or invalid access token.'));
+    if(course.author.id !== selfId) return next(new APIForbiddenError('Missing access.'));
 
     for(const key of Object.keys(req.body)) {
         if(!ALLOWED_COURSE_UPDATE_PROPS.includes(key)) {
-            return res.status(400).send({ message: `${key} is an invalid property.` });
+            return next(new APIBadRequestError(`${key} is an invalid property.`));
         }
     }
 

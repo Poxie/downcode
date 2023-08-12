@@ -6,6 +6,10 @@ import { getUserIdFromHeaders } from '../utils/auth';
 import { ALLOWED_SECTION_UPDATE_PROPS } from '../constants';
 import { getCourse } from './courses';
 import { createId } from '../utils';
+import { APINotFoundError } from '../errors/apiNotFoundError';
+import { APIUnauthorizedError } from '../errors/apiUnauthorizedError';
+import { APIForbiddenError } from '../errors/apiForbiddenError';
+import { APIBadRequestError } from '../errors/apiBadRequestError';
 
 const router = express.Router();
 
@@ -17,12 +21,13 @@ export const getSection = async (id: string) => {
     return section;
 }
 
-router.post(`/courses/:courseId/sections`, async (req: Request, res: Response) => {
+router.post(`/courses/:courseId/sections`, async (req, res, next) => {
     const course = await getCourse(req.params.courseId);
-    if(!course) return res.status(404).send({ message: 'Course not found.' });
+    if(!course) return next(new APINotFoundError('Course not found.'));
 
     const selfId = await getUserIdFromHeaders(req.headers);
-    if(selfId !== course.authorId) return res.status(401).send({ message: 'Unauthorized.' });
+    if(!selfId) return next(new APIUnauthorizedError('Missing or invalid access token.'));
+    if(course.author.id !== selfId) return next(new APIForbiddenError('Missing access.'));
 
     const sectionData = myDataSource.getRepository(Section).create({
         id: await createId('section'),
@@ -34,16 +39,16 @@ router.post(`/courses/:courseId/sections`, async (req: Request, res: Response) =
     return res.json(section);
 })
 
-router.get('/sections/:sectionId', async (req: Request, res: Response) => {
+router.get('/sections/:sectionId', async (req, res, next) => {
     const section = await getSection(req.params.sectionId);
-    if(!section) return res.status(404).send({ message: 'Section not found.' });
+    if(!section) return next(new APINotFoundError('Section not found.'));
 
     return res.json(section);
 })
 
-router.patch('/sections/:sectionId', async (req: Request, res: Response) => {
+router.patch('/sections/:sectionId', async (req, res, next) => {
     const section = await getSection(req.params.sectionId);
-    if(!section) return res.status(404).send({ message: 'Section not found.' });
+    if(!section) return next(new APINotFoundError('Section not found.'));
     
     // const selfId = await getUserIdFromHeaders(req.headers);
 
@@ -51,7 +56,7 @@ router.patch('/sections/:sectionId', async (req: Request, res: Response) => {
 
     for(const key of Object.keys(req.body)) {
         if(!ALLOWED_SECTION_UPDATE_PROPS.includes(key)) {
-            return res.status(400).send({ message: `${key} is an invalid property.` });
+            return next(new APIBadRequestError(`${key} is an invalid property.`));
         }
     }
 
