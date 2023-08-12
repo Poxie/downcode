@@ -1,3 +1,3 @@
-import { UserCourses } from "@/components/user/courses";
+import { PublishedCourses } from "@/components/user/courses/PublishedCourses";
 
-export default UserCourses;
+export default PublishedCourses;

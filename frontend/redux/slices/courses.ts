@@ -50,6 +50,10 @@ const _selectId = (_:RootState, __: string, id: string) => id;
 
 export const selectCourses = (state: RootState) => state.courses;
 export const selectDrafts = (state: RootState) => state.courses.filter(course => course.type === 'draft');
+export const selectDraftIds = createSelector(
+    [selectDrafts],
+    drafts => drafts.map(draft => draft.id)
+)
 export const selectCourseById = createSelector(
     [selectCourses, selectId],
     (courses, courseId) => courses.find(course => course.id === courseId)
