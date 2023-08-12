@@ -9,7 +9,7 @@ export const Course: React.FC<{
     const course = useAppSelector(state => selectCourseInfo(state, draftId));
     if(!course) return null;
 
-    const { title, description, skillLevel } = course;
+    const { title, description, skillLevel, status } = course;
 
     return(
         <div className="border-[1px] border-quaternary bg-tertiary rounded-lg mb-2">
@@ -34,10 +34,12 @@ export const Course: React.FC<{
                     {description || 'Course description not set'}
                 </span>
             </div>
-            <div className="flex justify-between p-[14px] border-t-[1px] border-quaternary">
-                <span className="text-xs">
-                    
-                </span>
+            <div className="flex items-center justify-between p-[14px] border-t-[1px] border-quaternary">
+                <CourseChip className="-my-1">
+                    {status === 'idle' && 'Not yet published.'}
+                    {status === 'pending' && 'Pending verification.'}
+                    {status === 'published' && 'Published course.'}
+                </CourseChip>
                 <Link 
                     className="text-xs transition-colors text-secondary hover:text-primary"
                     href={`/u/me/courses/drafts/${draftId}`}
