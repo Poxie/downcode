@@ -12,6 +12,7 @@ import { useParams } from 'next/navigation';
 import { Course } from '@/types';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { selectCourseDuration, selectCourseById, updateCourse, selectCourseXP } from '@/redux/slices/courses';
+import { useAuth } from '@/contexts/auth';
 
 const SKILL_LEVELS: { id: Course['skillLevel'], text: string }[] = [
     { id: 'beginner', text: 'Beginner' },
@@ -19,6 +20,7 @@ const SKILL_LEVELS: { id: Course['skillLevel'], text: string }[] = [
     { id: 'advanced', text: 'Advanced' },
 ]
 export const DraftOverview = () => {
+    const { patch } = useAuth();
     const draftId = useParams().draftId as string;
 
     const dispatch = useAppDispatch();
@@ -26,8 +28,16 @@ export const DraftOverview = () => {
     const courseDuration = useAppSelector(state => selectCourseDuration(state, draftId));
     const courseXP = useAppSelector(state => selectCourseXP(state, draftId));
 
-    const updateProperty = (changes: Partial<Course>) => {
+    const updateProperty = async (changes: Partial<Course>) => {
         dispatch(updateCourse({ id: draftId, changes }));
+
+        patch<Course>(`/courses/${draftId}`, changes)
+            .catch(() => {
+                if(!course) return;
+
+                // Going back to previous state on error
+                dispatch(updateCourse({ id: draftId, changes: course }))
+            })
     }
 
     const durationInHours = ((courseDuration / 60) / 60).toFixed(1).replace('.0', '');
