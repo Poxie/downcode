@@ -1,9 +1,10 @@
 import { getCourse } from "../routes/courses";
+import { getSection } from "../routes/sections";
 import { getUser } from "../routes/users";
 
 // Function to create id
 const ID_LENGTH = 10;
-export const createId = async (table: 'user' | 'course') => {
+export const createId = async (table: 'user' | 'course' | 'section') => {
     const opts = '0123456789';
 
     // Creating random id
@@ -13,7 +14,9 @@ export const createId = async (table: 'user' | 'course') => {
     }
 
     // Checking if id is available
-    if(table === 'user' ? await getUser(id) : await getCourse(id)) {
+    if(table === 'user' ? await getUser(id) : (
+        table === 'course' ? await getCourse(id) : await getSection(id)
+    )) {
         return await createId(table);
     }
 

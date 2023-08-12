@@ -5,14 +5,15 @@ import { myDataSource } from '../app-data-source';
 import { Course } from '../entity/course.entity';
 import { ALLOWED_COURSE_TYPES, ALLOWED_COURSE_UPDATE_PROPS } from '../constants';
 import { createId } from '../utils';
+import { Section } from '../entity/section.entity';
 
 const router = express.Router();
 
 export const getCourse = async (id: string) => {
     const course = await myDataSource.getRepository(Course).findOne({
         where: { id },
-        select: ['id', 'author', 'title', 'description', 'skillLevel', 'type', 'status', 'publishedAt', 'createdAt'],
-        relations: ['author'],
+        select: ['id', 'author', 'sections', 'title', 'description', 'skillLevel', 'type', 'status', 'publishedAt', 'createdAt'],
+        relations: ['author', 'sections'],
     })
     return course;
 }
@@ -28,6 +29,14 @@ router.post('/users/:userId/courses', async (req: Request, res: Response) => {
         authorId: userId,
         createdAt: String(Date.now()),
     })
+    const sectionData = myDataSource.getRepository(Section).create({
+        id: await createId('section'),
+        courseId: courseData.id,
+        createdAt: String(Date.now()),
+    })
+    console.log(courseData, sectionData);
+
+    const section = await myDataSource.getRepository(Section).save(sectionData);
     const course = await myDataSource.getRepository(Course).save(courseData);
 
     return res.json(course);
@@ -45,7 +54,8 @@ router.get('/users/:userId/courses', async (req: Request, res: Response) => {
 
     const courses = await myDataSource.getRepository(Course).find({
         where: { type, authorId: userId },
-        select: ['id', 'author', 'type', 'status', 'title', 'description', 'skillLevel', 'createdAt', 'publishedAt']
+        select: ['id', 'author', 'type', 'status', 'title', 'description', 'skillLevel', 'createdAt', 'publishedAt'],
+        relations: ['author', 'sections'],
     });
 
     return res.json(courses);
