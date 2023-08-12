@@ -34,10 +34,11 @@ router.post('/users/:userId/courses', async (req: Request, res: Response) => {
         courseId: courseData.id,
         createdAt: String(Date.now()),
     })
-    console.log(courseData, sectionData);
 
-    const section = await myDataSource.getRepository(Section).save(sectionData);
-    const course = await myDataSource.getRepository(Course).save(courseData);
+    await myDataSource.getRepository(Section).save(sectionData);
+    await myDataSource.getRepository(Course).save(courseData);
+
+    const course = await getCourse(courseData.id);
 
     return res.json(course);
 })
