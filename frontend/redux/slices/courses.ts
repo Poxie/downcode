@@ -73,11 +73,32 @@ export const selectCourseInfo = createSelector(
 )
 export const selectCourseDuration = createSelector(
     [selectCourseById],
-    course => 3600
+    course => {
+        if(!course) return;
+
+        const courseDuration = (
+            course.sections
+                .map(section => section.duration * (section.durationIdentifier === 'minutes' ? 60 : 60 * 60))
+                .reduce((partialDuration, sectionDuration) => partialDuration + sectionDuration, 0)
+        )
+        if(!courseDuration) return;
+
+        const durationInHours = ((courseDuration / 60) / 60).toFixed(1).replace('.0', '');
+        const durationString = Number(durationInHours) < 1 ? `${courseDuration / 60} minutes` : `${durationInHours} hours`;
+
+        return durationString;
+    }
 )
 export const selectCourseXP = createSelector(
     [selectCourseById],
-    course => 250
+    course => {
+        if(!course) return;
+
+        return(
+            course.sections.map(section => section.xp)
+            .reduce((partialXP, sectionXP) => partialXP + sectionXP, 0)
+        )
+    }
 )
 
 export const selectCourseSectionIds = createSelector(

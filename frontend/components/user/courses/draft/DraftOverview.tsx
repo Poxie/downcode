@@ -48,8 +48,6 @@ export const DraftOverview: React.FC<{
             })
     }
 
-    const durationInHours = ((courseDuration / 60) / 60).toFixed(1).replace('.0', '');
-    const durationString = Number(durationInHours) < 1 ? `${courseDuration / 60} minutes` : `${durationInHours} hours`;
     return(
         <motion.div
             className="flex-1 grid gap-4"
@@ -75,7 +73,7 @@ export const DraftOverview: React.FC<{
                     <CourseChip
                         className={!courseDuration ? 'italic' : ''}
                     >
-                        {courseDuration ? durationString : 'Lecture durations not specified'}
+                        {courseDuration || 'Lecture durations not specified'}
                     </CourseChip>
                     <span className="text-xs mx-1">
                         •
