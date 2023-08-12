@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-type ButtonType = 'primary' | 'secondary' | 'danger' | 'transparent';
+type ButtonType = 'primary' | 'secondary' | 'danger' | 'incomplete' | 'transparent';
 
 const typeToColor = (type: ButtonType) => {
     if(type === 'danger') return 'text-red-500';
@@ -10,9 +10,11 @@ const typeToBackground = (type: ButtonType) => {
     if(type === 'primary') return 'bg-c-primary';
     if(type === 'secondary' || type === 'danger') return 'bg-tertiary';
     if(type === 'transparent') return 'bg-transparent';
+    if(type === 'incomplete') return 'bg-incomplete-btn';
 }
 const typeToHover = (type: ButtonType) => {
     if(type === 'primary') return 'hover:bg-c-secondary';
+    if(type === 'incomplete') return 'hover:bg-incomplete-btn-accent';
     return 'hover:bg-quaternary';
 }
 

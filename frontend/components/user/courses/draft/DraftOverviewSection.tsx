@@ -2,18 +2,22 @@ import { useAppSelector } from "@/redux/store";
 import { CourseChip } from "../CourseChip";
 import { Button } from "@/components/button";
 import { selectSectionById } from "@/redux/slices/courses";
+import { useDraft } from ".";
 
 export const DraftOverviewSection: React.FC<{
+    isLast: boolean;
     sectionId: string;
     draftId: string;
     index: number;
-}> = ({ sectionId, draftId, index }) => {
+}> = ({ sectionId, draftId, isLast, index }) => {
+    const { preview } = useDraft();
+
     const section = useAppSelector(state => selectSectionById(state, draftId, sectionId));
     if(!section) return null;
 
     return(
         <>
-            <div className="flex border-[1px] border-tertiary rounded-lg">
+            <div className={`flex border-[1px] border-tertiary rounded-lg bg-gradient-to-r ${preview ? 'from-incomplete-from to-incomplete-to' : ''}`}>
                 <div className="min-w-[95px] flex items-center justify-center border-r-[1px] border-r-tertiary">
                     <span className="text-4xl text-secondary font-bold">
                         {index + 1}
@@ -41,17 +45,20 @@ export const DraftOverviewSection: React.FC<{
                             </CourseChip>
                         </div>
                         <Button
+                            type={'incomplete'}
                             href={`/u/me/courses/drafts/${draftId}?s=${sectionId}`}
                             className="-m-2"
                             isSmall
                         >
-                            Edit lecture
+                            {preview ? 'Go to lecture' : 'Edit lecture'}
                         </Button>
                     </div>
                 </div>
             </div>
 
-            <div className="relative my-2 w-[95px] h-[28px] after:absolute after:h-[12px] after:w-[2px] after:top-0 after:left-2/4 after:-translate-x-2/4 after:bg-tertiary after:rounded-lg before:absolute before:h-[12px] before:w-[2px] before:bottom-0 before:left-2/4 before:-translate-x-2/4 before:bg-tertiary before:rounded-lg" />
+            {(!preview || !isLast) && (
+                <div className="relative my-2 w-[95px] h-[28px] after:absolute after:h-[12px] after:w-[2px] after:top-0 after:left-2/4 after:-translate-x-2/4 after:bg-tertiary after:rounded-lg before:absolute before:h-[12px] before:w-[2px] before:bottom-0 before:left-2/4 before:-translate-x-2/4 before:bg-tertiary before:rounded-lg" />
+            )}
         </>
     )
 }

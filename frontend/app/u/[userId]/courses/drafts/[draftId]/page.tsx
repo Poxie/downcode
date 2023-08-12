@@ -1,3 +1,5 @@
-import { DraftPage } from "@/components/user/courses/draft";
+"use client";
 
-export default DraftPage;
+import { Draft } from "@/components/user/courses/draft";
+
+export default Draft;

@@ -11,6 +11,7 @@ import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { selectCourseDuration, updateCourse, selectCourseXP, selectCourseInfo } from '@/redux/slices/courses';
 import { useAuth } from '@/contexts/auth';
 import { DraftSections } from './DraftSections';
+import { useDraft } from '.';
 
 const SKILL_LEVELS: { id: Course['skillLevel'], text: string }[] = [
     { id: 'beginner', text: 'Beginner' },
@@ -21,6 +22,7 @@ export const DraftOverview: React.FC<{
     draftId: string;
 }> = ({ draftId }) => {
     const { patch } = useAuth();
+    const { preview, setPreview } = useDraft();
 
     const dispatch = useAppDispatch();
     const course = useAppSelector(state => selectCourseInfo(state, draftId));
@@ -56,14 +58,16 @@ export const DraftOverview: React.FC<{
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: .15 }}
         >
-            <div className="flex p-4 bg-secondary border-[1px] border-tertiary rounded-lg">
-                <Dropdown<Course['skillLevel']> 
-                    active={course?.skillLevel || 'beginner'}
-                    onSelect={skillLevel => updateProperty({ skillLevel })}
-                    items={SKILL_LEVELS}
-                    label={'Course skill level'}
-                />
-            </div>
+            {!preview && (
+                <div className="flex p-4 bg-secondary border-[1px] border-tertiary rounded-lg">
+                    <Dropdown<Course['skillLevel']> 
+                        active={course?.skillLevel || 'beginner'}
+                        onSelect={skillLevel => updateProperty({ skillLevel })}
+                        items={SKILL_LEVELS}
+                        label={'Course skill level'}
+                    />
+                </div>
+            )}
             
             <div className="grid gap-4 p-4 bg-secondary border-[1px] border-tertiary rounded-lg">
                 <div className="flex gap-1 items-center">
@@ -91,6 +95,7 @@ export const DraftOverview: React.FC<{
                         onChange={title => updateProperty({ title })}
                         placeholder={'Course title not set'}
                         text={course?.title || ''}
+                        disabled={preview}
                     />
                     <EditableText 
                         iconClassName="w-[13px]"
@@ -98,15 +103,29 @@ export const DraftOverview: React.FC<{
                         onChange={description => updateProperty({ description })}
                         placeholder={'Course description not set'}
                         text={course?.description || ''}
+                        disabled={preview}
                     />
                 </div>
                 <div className="flex gap-2">
-                    <Button type={'secondary'} isSmall>
-                        Preview course
-                    </Button>
-                    <Button isSmall>
-                        Publish course
-                    </Button>
+                    {!preview ? (
+                        <>
+                        <Button 
+                            onClick={() => setPreview(true)}
+                            type={'secondary'} 
+                            isSmall
+                            key={'preview'}
+                        >
+                            Preview course
+                        </Button>
+                        <Button isSmall>
+                            Publish course
+                        </Button>
+                        </>
+                    ) : (
+                        <Button isSmall>
+                            Start course
+                        </Button>
+                    )}
                 </div>
             </div>
             

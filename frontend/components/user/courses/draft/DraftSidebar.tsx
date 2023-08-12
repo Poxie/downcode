@@ -5,8 +5,10 @@ import { useParams, useSearchParams } from "next/navigation"
 import { useAppSelector } from "@/redux/store";
 import { selectCourseSectionIds } from "@/redux/slices/courses";
 import { DraftSidebarSection } from "./DraftSidebarSection";
+import { useDraft } from ".";
 
 export const DraftSidebar = () => {
+    const { preview } = useDraft();
     const draftId = useParams().draftId as string;
     const activeSection = useSearchParams().get('s');
 
@@ -42,15 +44,17 @@ export const DraftSidebar = () => {
                     />
                 ))}
             </ul>
-            <Link 
-                className="flex gap-3 items-center mt-4 w-full text-secondary hover:text-primary"
-                href={`/u/me/courses/drafts/${draftId}?s=new`}
-            >
-                <AddIcon className="w-4 -m-[5px] transition-colors" />
-                <span className="text-xs transition-colors">
-                    Add another lecture
-                </span>
-            </Link>
+            {!preview && (
+                <Link 
+                    className="flex gap-3 items-center mt-4 w-full text-secondary hover:text-primary"
+                    href={`/u/me/courses/drafts/${draftId}?s=new`}
+                >
+                    <AddIcon className="w-4 -m-[5px] transition-colors" />
+                    <span className="text-xs transition-colors">
+                        Add another lecture
+                    </span>
+                </Link>
+            )}
         </motion.div>
     )
 }

@@ -9,6 +9,7 @@ import { Section } from '@/types';
 import { useAuth } from '@/contexts/auth';
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useDraft } from '.';
 
 const TIME_ITEMS = (['minutes', 'hours'] as const).map(t => ({ id: t, text: t }));
 
@@ -17,6 +18,7 @@ export const DraftSection: React.FC<{
     draftId: string;
 }> = ({ draftId, sectionId }) => {
     const router = useRouter();
+    const { preview } = useDraft();
     const { patch, post, loading } = useAuth();
 
     const dispatch = useAppDispatch();
@@ -64,34 +66,36 @@ export const DraftSection: React.FC<{
             animate={{ scale: 1, opacity: 1 }}
             transition={{ duration: .15 }}
         >
-            <div className="p-4 flex gap-3 border-[1px] bg-secondary border-tertiary rounded-lg">
-                <div className="flex">
+            {!preview && (
+                <div className="p-4 flex gap-3 border-[1px] bg-secondary border-tertiary rounded-lg">
+                    <div className="flex">
+                        <Input 
+                            label={'Lecture duration'}
+                            name={'lecture-duration'}
+                            className='p-[10px] h-[38px] rounded-r-none'
+                            containerClassName='w-[140px]'
+                            onChange={duration => updateProperty({ duration: Number(duration) })}
+                            value={!duration ? '' : duration}
+                            type={'number'}
+                        />
+                        <Dropdown<typeof durationIdentifier> 
+                            items={TIME_ITEMS}
+                            active={durationIdentifier}
+                            onSelect={durationIdentifier => updateProperty({ durationIdentifier })}
+                            selectedClassName={'rounded-l-none'}
+                            width={140}
+                        />
+                    </div>
                     <Input 
-                        label={'Lecture duration'}
-                        name={'lecture-duration'}
-                        className='p-[10px] h-[38px] rounded-r-none'
-                        containerClassName='w-[140px]'
-                        onChange={duration => updateProperty({ duration: Number(duration) })}
-                        value={!duration ? '' : duration}
+                        className='p-[10px] h-[38px]'
+                        label={'Lecture XP'}
+                        name={'lecture-xp'}
+                        onChange={xp => updateProperty({ xp: Number(xp) })}
+                        value={!xp ? '' : xp}
                         type={'number'}
                     />
-                    <Dropdown<typeof durationIdentifier> 
-                        items={TIME_ITEMS}
-                        active={durationIdentifier}
-                        onSelect={durationIdentifier => updateProperty({ durationIdentifier })}
-                        selectedClassName={'rounded-l-none'}
-                        width={140}
-                    />
                 </div>
-                <Input 
-                    className='p-[10px] h-[38px]'
-                    label={'Lecture XP'}
-                    name={'lecture-xp'}
-                    onChange={xp => updateProperty({ xp: Number(xp) })}
-                    value={!xp ? '' : xp}
-                    type={'number'}
-                />
-            </div>
+            )}
             <div className="p-4 border-[1px] bg-secondary border-tertiary rounded-lg">
                 <div className="flex items-center pb-4">
                     <CourseChip className={!duration ? 'italic' : ''}>
@@ -108,16 +112,18 @@ export const DraftSection: React.FC<{
                     </CourseChip>
                 </div>
                 <EditableText 
-                    className={`mb-1 text-xl ${title ? 'font-bold' : ''}`}
+                    className={`block mb-1 text-xl ${title ? 'font-bold' : ''}`}
                     onChange={title => updateProperty({ title })}
                     text={title}
                     placeholder={'Lecture title not set'}
+                    disabled={preview}
                 />
                 <EditableText 
                     className={`text-sm text-secondary`}
                     onChange={description => updateProperty({ description })}
                     text={description}
                     placeholder={'Lecture description not set'}
+                    disabled={preview}
                 />
             </div>
         </motion.div>
