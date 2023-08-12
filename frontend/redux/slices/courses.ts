@@ -22,6 +22,12 @@ const coursesSlice = createSlice({
                 (course as Record<string, Course[keyof Course]>)[property] = value;
             }
         },
+        addSection: (state, action: PayloadAction<Section>) => {
+            const course = state.find(course => course.id === action.payload.courseId);
+            if(!course) return;
+
+            course.sections.push(action.payload);
+        },
         updateSection: (state, action: PayloadAction<{ courseId: string, sectionId: string, changes: Partial<Section> }>) => {
             const course = state.find(course => course.id === action.payload.courseId);
             const section = course?.sections?.find(section => section.id === action.payload.sectionId);
@@ -35,7 +41,7 @@ const coursesSlice = createSlice({
 })
 
 // Actions & reducer
-export const { addCourses, updateCourse, updateSection } = coursesSlice.actions;
+export const { addCourses, updateCourse, addSection, updateSection } = coursesSlice.actions;
 export default coursesSlice.reducer;
 
 // Selectors

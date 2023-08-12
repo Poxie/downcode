@@ -42,15 +42,15 @@ export const DraftSidebar = () => {
                     />
                 ))}
             </ul>
-            {/* <button 
+            <Link 
                 className="flex gap-3 items-center mt-4 w-full text-secondary hover:text-primary"
-                onClick={addSection}
+                href={`/u/me/courses/drafts/${draftId}?s=new`}
             >
                 <AddIcon className="w-4 -m-[5px] transition-colors" />
                 <span className="text-xs transition-colors">
                     Add another lecture
                 </span>
-            </button> */}
+            </Link>
         </motion.div>
     )
 }

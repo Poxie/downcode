@@ -2,6 +2,7 @@ import { AddIcon } from "@/assets/icons/AddIcon";
 import { useAppSelector } from "@/redux/store"
 import { DraftOverviewSection } from "./DraftOverviewSection";
 import { selectCourseSectionIds } from "@/redux/slices/courses";
+import Link from "next/link";
 
 export const DraftSections: React.FC<{
     draftId: string;
@@ -22,15 +23,15 @@ export const DraftSections: React.FC<{
                     key={index}
                 />
             ))}
-            <button 
+            <Link 
                 className="h-[120px] w-full text-xs text-secondary flex gap-2 justify-center items-center transition-colors hover:bg-secondary border-[1px] border-tertiary rounded-lg"
-                onClick={console.log}
+                href={`/u/me/courses/drafts/${draftId}?s=new`}
             >
                 <AddIcon className="w-4" />
                 <span>
                     Add another lecture
                 </span>
-            </button>
+            </Link>
         </div>
     )
 }

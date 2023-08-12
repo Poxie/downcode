@@ -21,6 +21,7 @@ export type Course = {
 }
 export type Section = {
     id: string;
+    courseId: string;
     duration: number;
     durationIdentifier: 'minutes' | 'hours';
     xp: number;

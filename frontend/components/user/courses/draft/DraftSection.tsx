@@ -3,10 +3,12 @@ import { Input } from '@/components/input';
 import { motion } from 'framer-motion';
 import { CourseChip } from '../CourseChip';
 import { EditableText } from './EditableText';
-import { selectSectionById, updateSection } from '@/redux/slices/courses';
+import { addSection, selectSectionById, updateSection } from '@/redux/slices/courses';
 import { useAppDispatch, useAppSelector } from '@/redux/store';
 import { Section } from '@/types';
 import { useAuth } from '@/contexts/auth';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 const TIME_ITEMS = (['minutes', 'hours'] as const).map(t => ({ id: t, text: t }));
 
@@ -14,11 +16,23 @@ export const DraftSection: React.FC<{
     sectionId: string;
     draftId: string;
 }> = ({ draftId, sectionId }) => {
-    const { patch } = useAuth();
+    const router = useRouter();
+    const { patch, post, loading } = useAuth();
 
     const dispatch = useAppDispatch();
     const section = useAppSelector(state => selectSectionById(state, draftId, sectionId));
-    if(!section) return null;
+
+    useEffect(() => {
+        if(loading || sectionId !== 'new') return;
+
+        post<Section>(`/courses/${draftId}/sections`)
+            .then(section => {
+                dispatch(addSection(section));
+                router.replace(`/u/me/courses/drafts/${draftId}?s=${section.id}`);
+            })
+    }, [draftId, sectionId, loading]);
+
+    if(!section || sectionId === 'new') return null;
 
     const updateProperty = async (changes: Partial<Section>) => {
         if(!section) return;
