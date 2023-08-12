@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { AddIcon } from "@/assets/icons/AddIcon"
-import { usePathname } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 
 const COURSE_TABS = [
     { text: 'Published courses', path: '' },
@@ -13,12 +13,14 @@ export default function UserCourses({
 }: {
     children: React.ReactNode;
 }) {
+    const userId = useParams().userId as string;
     const pathname = usePathname();
+
     return(
         <div className="p-4 bg-secondary border-[1px] border-tertiary rounded-lg">
             <ul className="flex gap-3 mb-3">
                 {COURSE_TABS.map(tab => {
-                    const path = `/u/me/courses${tab.path}`;
+                    const path = `/u/${userId}/courses${tab.path}`;
                     const active = path === pathname;
 
                     return(

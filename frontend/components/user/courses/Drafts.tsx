@@ -4,10 +4,12 @@ import { useAppDispatch, useAppSelector } from "@/redux/store"
 import { Course as CourseType } from "@/types";
 import { useEffect, useState } from "react";
 import { Course } from "./Course";
+import { useParams } from "next/navigation";
 
 const PLACEHOLDER_COUNT = 2;
 export const Drafts = () => {
     const { get, loading: loadingAuth } = useAuth();
+    const userId = useParams().userId as string;
 
     const dispatch = useAppDispatch()
     const draftIds = useAppSelector(selectDraftIds);
@@ -17,12 +19,12 @@ export const Drafts = () => {
     useEffect(() => {
         if(loadingAuth || draftIds.length) return;
 
-        get<CourseType[]>(`/users/me/courses?type=draft`)
+        get<CourseType[]>(`/users/${userId}/courses?type=draft`)
             .then(courses => {
                 dispatch(addCourses(courses));
                 setLoading(false);
             })
-    }, [draftIds.length, loadingAuth]);
+    }, [userId, draftIds.length, loadingAuth]);
 
     return(
         <>
